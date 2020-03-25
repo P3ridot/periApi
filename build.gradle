@@ -1,4 +1,4 @@
-group 'me.peridot.peridrop'
+group 'api.peridot.periapi'
 version '1.0'
 
 apply plugin: 'java'
