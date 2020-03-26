@@ -5,9 +5,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class InventoryContent {
 
@@ -39,6 +37,24 @@ public class InventoryContent {
         inventoryItems.put(slot, inventoryItem);
     }
 
+    public void addItem(InventoryItem inventoryItem) {
+        int slot = firstEmptySlot();
+        if (slot == -1) return;
+        this.setItem(slot, inventoryItem);
+    }
+
+    public void fill(InventoryItem inventoryItem) {
+        for (int i = 0; i < 53; i++) {
+            setItem(i, inventoryItem);
+        }
+    }
+
+    public void fillEmpty(InventoryItem inventoryItem) {
+        for (int i : emptySlots()) {
+            setItem(i, inventoryItem);
+        }
+    }
+
     public int slotFromRowAndColumn(int row, int column) {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
         Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
@@ -59,9 +75,19 @@ public class InventoryContent {
 
     public boolean isEmptySlot(int slot) {
         return inventoryItems.get(slot) == null
-                && inventoryItems.get(slot).getItem() == null
-                && inventoryItems.get(slot).getItem().getType() == null
-                && inventoryItems.get(slot).getItem().getType() == Material.AIR;
+                || inventoryItems.get(slot).getItem() == null
+                || inventoryItems.get(slot).getItem().getType() == null
+                || inventoryItems.get(slot).getItem().getType() == Material.AIR;
+    }
+
+    public List<Integer> emptySlots() {
+        List<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < 53; i++) {
+            if (isEmptySlot(i)) list.add(i);
+        }
+
+        return list;
     }
 
     public int firstEmptySlot() {
