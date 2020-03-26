@@ -94,7 +94,7 @@ public class CustomInventory {
         Inventory inventory = getInventory(player);
 
         if (updateTask == null) {
-            updateTask = Bukkit.getScheduler().runTaskTimer(this.plugin, new Runnable() {
+            updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
                 @Override
                 public void run() {
                     provider.update(player, content);

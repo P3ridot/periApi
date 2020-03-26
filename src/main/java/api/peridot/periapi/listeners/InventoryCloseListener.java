@@ -34,7 +34,7 @@ public class InventoryCloseListener implements Listener {
                 return;
             }
 
-            Bukkit.getScheduler().runTaskLater(plugin, () -> customInventory.open(player), 2);
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> customInventory.open(player), 2);
 
             return;
         }
