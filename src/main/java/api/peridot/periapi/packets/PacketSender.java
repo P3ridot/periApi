@@ -17,7 +17,7 @@ public class PacketSender {
     }
 
     public static void sendPacket(List<Object> packets) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             sendPacket(player, packets);
         }
     }
@@ -28,9 +28,9 @@ public class PacketSender {
 
 
     public static void sendPacket(List<Player> players, List<Object> packets) {
-        if(players.isEmpty()) return;
+        if (players.isEmpty()) return;
 
-        for(Player player : players) {
+        for (Player player : players) {
             sendPacket(player, packets);
         }
     }
@@ -40,9 +40,9 @@ public class PacketSender {
     }
 
     public static void sendPacket(Player player, List<Object> packets) {
-        if(player == null) return;
+        if (player == null) return;
         try {
-            for(Object packet : packets) {
+            for (Object packet : packets) {
                 sendPacket.invoke(getConnection(player), packet);
             }
         } catch (Exception ex) {

@@ -55,6 +55,46 @@ public class InventoryContent {
         }
     }
 
+    public void fillRow(int row, InventoryItem inventoryItem) {
+        Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
+        Validate.isTrue(row <= 6, "Row value must be smaller or equal 6");
+
+        for (int i = 0; i < 9; i++) {
+            setItem((row - 1) * 9 + i, inventoryItem);
+        }
+    }
+
+    public void fillRowEmpty(int row, InventoryItem inventoryItem) {
+        Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
+        Validate.isTrue(row <= 6, "Row value must be smaller or equal 6");
+
+        for (int i = 0; i < 9; i++) {
+            int slot = (row - 1) * 9 + i;
+            if (!isEmptySlot(slot)) continue;
+            setItem(slot, inventoryItem);
+        }
+    }
+
+    public void fillColumn(int column, InventoryItem inventoryItem) {
+        Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
+        Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
+
+        for (int i = 0; i < 6; i++) {
+            setItem((column + (i * 9)) - 1, inventoryItem);
+        }
+    }
+
+    public void fillColumnEmpty(int column, InventoryItem inventoryItem) {
+        Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
+        Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
+
+        for (int i = 0; i < 6; i++) {
+            int slot = (column + (i * 9)) - 1;
+            if (!isEmptySlot(slot)) continue;
+            setItem(slot, inventoryItem);
+        }
+    }
+
     public int slotFromRowAndColumn(int row, int column) {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
         Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");

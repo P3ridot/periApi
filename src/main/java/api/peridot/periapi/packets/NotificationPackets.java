@@ -1,7 +1,5 @@
 package api.peridot.periapi.packets;
 
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -25,6 +23,27 @@ public class NotificationPackets {
     private static Enum<?> SUBTITLE_ENUM;
     private static Enum<?> TIMES_ENUM;
 
+    static {
+        try {
+            CRAFT_CHAT_MESSAGE_CLASS = Reflections.getBukkitClass("util.CraftChatMessage");
+            CREATE_BASE_COMPONENT_CRAFTBUKKIT = CRAFT_CHAT_MESSAGE_CLASS.getMethod("fromString", String.class);
+
+            if (Reflections.use_pre_12_methods) {
+                CHAT_MESSAGE_TYPE_CLASS = null;
+            } else {
+                CHAT_MESSAGE_TYPE_CLASS = Reflections.getNMSClass("ChatMessageType");
+            }
+
+            TITLE_ACTION_CLASS = Reflections.server_version.equals("v1_8_R1") ? Reflections.getNMSClass("EnumTitleAction") : Reflections.getNMSClass("PacketPlayOutTitle$EnumTitleAction");
+            GET_TITLE_ACTION_ENUM = TITLE_ACTION_CLASS.getMethod("valueOf", String.class);
+            TITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TITLE");
+            SUBTITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "SUBTITLE");
+            TIMES_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TIMES");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static List<Object> createTitlePacket(String title, String subTitle, int fadeIn, int stay, int fadeOut) {
         List<Object> packets = new ArrayList<>();
         try {
@@ -36,7 +55,7 @@ public class NotificationPackets {
 
             packets.addAll(Arrays.asList(titlePacket, subtitlePacket, timesPacket));
         } catch (Exception ex) {
-            ex.printStackTrace();;
+            ex.printStackTrace();
         }
         return packets;
     }
@@ -44,7 +63,7 @@ public class NotificationPackets {
     public static Object createActionBarPacket(String text) {
         Object packet = null;
         try {
-            if(CHAT_MESSAGE_TYPE_CLASS != null) {
+            if (CHAT_MESSAGE_TYPE_CLASS != null) {
                 Constructor<?> actionbarPacketConstructor = PACKET_PLAY_OUT_CHAT_CLASS.getConstructor(CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
 
                 packet = actionbarPacketConstructor.newInstance(createBaseComponent(text), CHAT_MESSAGE_TYPE_CLASS.getEnumConstants()[2]);
@@ -67,27 +86,6 @@ public class NotificationPackets {
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
-        }
-    }
-
-    static {
-        try {
-            CRAFT_CHAT_MESSAGE_CLASS = Reflections.getBukkitClass("util.CraftChatMessage");
-            CREATE_BASE_COMPONENT_CRAFTBUKKIT = CRAFT_CHAT_MESSAGE_CLASS.getMethod("fromString", String.class);
-
-            if(Reflections.use_pre_12_methods) {
-                CHAT_MESSAGE_TYPE_CLASS = null;
-            } else {
-                CHAT_MESSAGE_TYPE_CLASS = Reflections.getNMSClass("ChatMessageType");
-            }
-
-            TITLE_ACTION_CLASS = Reflections.server_version.equals("v1_8_R1") ? Reflections.getNMSClass("EnumTitleAction") : Reflections.getNMSClass("PacketPlayOutTitle$EnumTitleAction");
-            GET_TITLE_ACTION_ENUM = TITLE_ACTION_CLASS.getMethod("valueOf", String.class);
-            TITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TITLE");
-            SUBTITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "SUBTITLE");
-            TIMES_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TIMES");
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
