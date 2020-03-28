@@ -1,4 +1,4 @@
-package api.peridot.periapi.utils;
+package api.peridot.periapi.items;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -11,10 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ItemBuilder {
 
@@ -30,7 +27,7 @@ public class ItemBuilder {
     }
 
     @Deprecated
-    public ItemBuilder(Material material, int amount, byte durability) {
+    public ItemBuilder(Material material, int amount, short durability) {
         this(new ItemStack(material, amount, durability));
     }
 
@@ -106,9 +103,19 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder addEnchantments(Map<Enchantment, Integer> enchantments) {
+        enchantments.forEach(this::addEnchantment);
+        return this;
+    }
+
     public ItemBuilder addUnsafeEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
         this.itemMeta.addEnchant(enchantment, level, true);
+        return this;
+    }
+
+    public ItemBuilder addUnsafeEnchantments(Map<Enchantment, Integer> enchantments) {
+        enchantments.forEach(this::addUnsafeEnchantment);
         return this;
     }
 
@@ -127,6 +134,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder addBookEnchantments(Map<Enchantment, Integer> enchantments) {
+        enchantments.forEach(this::addBookEnchantment);
+        return this;
+    }
+
     public ItemBuilder addUnsafeBookEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
         try {
@@ -134,6 +146,11 @@ public class ItemBuilder {
             enchantmentStorageMeta.addStoredEnchant(enchantment, level, true);
             this.itemMeta = enchantmentStorageMeta;
         } catch (Exception ignored) { }
+        return this;
+    }
+
+    public ItemBuilder addUnsafeBookEnchantments(Map<Enchantment, Integer> enchantments) {
+        enchantments.forEach(this::addUnsafeBookEnchantment);
         return this;
     }
 

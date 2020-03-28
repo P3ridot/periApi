@@ -13,8 +13,8 @@ public class LangAPI {
     private final ConfigurationSection section;
     private final Logger logger;
 
-    private Map<String, LangMessage> messages;
-    private Map<String, SimpleLangMessage> simpleMessages;
+    private final Map<String, LangMessage> messages = new HashMap<>();
+    private final Map<String, SimpleLangMessage> simpleMessages = new HashMap<>();
 
     public LangAPI(ConfigurationSection section) {
         this.section = section;
@@ -65,9 +65,6 @@ public class LangAPI {
     }
 
     public void reload() {
-        if (messages == null) messages = new HashMap<>();
-        if (simpleMessages == null) simpleMessages = new HashMap<>();
-
         if (section == null) {
             logger.warning("[LangAPI] Missing messages section!");
             return;
