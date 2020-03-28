@@ -1,6 +1,6 @@
 package api.peridot.periapi.listeners;
 
-import api.peridot.periapi.PeriApi;
+import api.peridot.periapi.PeriAPI;
 import api.peridot.periapi.inventories.CustomInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,9 +12,9 @@ import org.bukkit.plugin.Plugin;
 public class InventoryCloseListener implements Listener {
 
     private final Plugin plugin;
-    private final PeriApi periApi;
+    private final PeriAPI periApi;
 
-    public InventoryCloseListener(Plugin plugin, PeriApi periApi) {
+    public InventoryCloseListener(Plugin plugin, PeriAPI periApi) {
         this.plugin = plugin;
         this.periApi = periApi;
     }

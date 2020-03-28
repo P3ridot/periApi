@@ -7,13 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-public class PeriApi {
+public class PeriAPI {
 
     private final Plugin plugin;
 
     private PeriInventoryManager inventoryManager;
 
-    public PeriApi(Plugin plugin) {
+    public PeriAPI(Plugin plugin) {
         this.plugin = plugin;
     }
 

@@ -1,6 +1,6 @@
 package api.peridot.periapi.listeners;
 
-import api.peridot.periapi.PeriApi;
+import api.peridot.periapi.PeriAPI;
 import api.peridot.periapi.inventories.CustomInventory;
 import api.peridot.periapi.inventories.InventoryContent;
 import api.peridot.periapi.inventories.items.InventoryItem;
@@ -15,9 +15,9 @@ import org.bukkit.plugin.Plugin;
 public class InventoryClickListener implements Listener {
 
     private final Plugin plugin;
-    private final PeriApi periApi;
+    private final PeriAPI periApi;
 
-    public InventoryClickListener(Plugin plugin, PeriApi periApi) {
+    public InventoryClickListener(Plugin plugin, PeriAPI periApi) {
         this.plugin = plugin;
         this.periApi = periApi;
     }

@@ -1,6 +1,6 @@
 package api.peridot.periapi.inventories;
 
-import api.peridot.periapi.PeriApi;
+import api.peridot.periapi.PeriAPI;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
@@ -8,11 +8,11 @@ import java.util.*;
 public class PeriInventoryManager {
 
     private final Plugin plugin;
-    private final PeriApi periApi;
+    private final PeriAPI periApi;
 
     public List<CustomInventory> inventoriesList = new ArrayList<>();
 
-    public PeriInventoryManager(Plugin plugin, PeriApi periApi) {
+    public PeriInventoryManager(Plugin plugin, PeriAPI periApi) {
         this.plugin = plugin;
         this.periApi = periApi;
     }
@@ -21,7 +21,7 @@ public class PeriInventoryManager {
         return plugin;
     }
 
-    public PeriApi getPeriApi() {
+    public PeriAPI getPeriApi() {
         return periApi;
     }
 
