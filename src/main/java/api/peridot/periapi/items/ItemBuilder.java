@@ -45,13 +45,8 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setDurability(short durability) {
-        this.itemStack.setDurability(durability);
-        return this;
-    }
-
     public ItemBuilder setUnbreakable() {
-        this.itemStack.setDurability(Short.MAX_VALUE);
+        this.itemStack.setDurability(Short.MIN_VALUE);
         return this;
     }
 

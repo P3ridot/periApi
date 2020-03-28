@@ -9,10 +9,12 @@ import java.util.stream.Collectors;
 public class ColorUtil {
 
     public static String color(String string) {
+        if(string == null || string.isEmpty()) return "";
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
     public static List<String> color(List<String> list) {
+        if(list == null || list.isEmpty()) return Arrays.asList("");
         return list.stream()
                 .map(ColorUtil::color).collect(Collectors.toList());
     }
