@@ -28,6 +28,7 @@ public class ItemBuilder {
         this(new ItemStack(material, amount));
     }
 
+    @Deprecated
     public ItemBuilder(Material material, int amount, byte durability) {
         this(new ItemStack(material, amount, durability));
     }
