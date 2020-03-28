@@ -54,7 +54,8 @@ public class LangMessage {
             if (useActionBar) {
                 actionBarContent = ColorUtil.color(section.getString("actionbar.content"));
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     public void broadcast(Replacement... replacements) {
@@ -67,7 +68,7 @@ public class LangMessage {
         if (useChat || (!(sender instanceof Player) && useChatIfNotPlayer)) {
             getChatContent(replacements).forEach(sender::sendMessage);
         }
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             Player player = (Player) sender;
             if (useTitle) {
                 String titleMsg = getTitleContent(replacements);

@@ -24,7 +24,8 @@ public class SimpleLangMessage {
             } else if (section.isList("chat.content")) {
                 chatContent = ColorUtil.color(section.getStringList("chat.content"));
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
     public void broadcast(Replacement... replacements) {
@@ -56,7 +57,7 @@ public class SimpleLangMessage {
     }
 
     public String getStringLine() {
-        if(chatContent.size() == 1) return chatContent.get(0);
+        if (chatContent.size() == 1) return chatContent.get(0);
         return chatContent.toString();
     }
 }

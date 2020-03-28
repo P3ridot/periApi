@@ -1,6 +1,7 @@
 package api.peridot.periapi.packets;
 
-import java.lang.reflect.Array;
+import org.apache.commons.lang.StringUtils;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class NotificationPackets {
     private static Class<?> TITLE_ACTION_CLASS;
     private static Class<?> CHAT_MESSAGE_TYPE_CLASS;
 
-    private static Method CREATE_BASE_COMPONENT_CRAFTBUKKIT;
+    private static Method CREATE_BASE_COMPONENT;
     private static Method GET_TITLE_ACTION_ENUM;
 
     private static Enum<?> TITLE_ENUM;
@@ -26,7 +27,7 @@ public class NotificationPackets {
     static {
         try {
             CRAFT_CHAT_MESSAGE_CLASS = Reflections.getBukkitClass("util.CraftChatMessage");
-            CREATE_BASE_COMPONENT_CRAFTBUKKIT = CRAFT_CHAT_MESSAGE_CLASS.getMethod("fromString", String.class);
+            CREATE_BASE_COMPONENT = Reflections.server_version.equals("v1_8_R1") ? Reflections.getNMSClass("ChatSerializer").getMethod("a", String.class) : Reflections.getNMSClass("IChatBaseComponent$ChatSerializer").getMethod("a", String.class);
 
             if (Reflections.use_pre_12_methods) {
                 CHAT_MESSAGE_TYPE_CLASS = null;
@@ -82,7 +83,7 @@ public class NotificationPackets {
         String resultText = text != null ? text : "";
 
         try {
-            return Array.get(CREATE_BASE_COMPONENT_CRAFTBUKKIT.invoke(CRAFT_CHAT_MESSAGE_CLASS, text), 0);
+            return CREATE_BASE_COMPONENT.invoke(null, StringUtils.replace("{\"text\": \"{TEXT}\"}", "{TEXT}", resultText));
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

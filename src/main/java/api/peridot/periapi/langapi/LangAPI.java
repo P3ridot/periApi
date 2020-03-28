@@ -65,8 +65,8 @@ public class LangAPI {
     }
 
     public void reload() {
-        if(messages == null) messages = new HashMap<>();
-        if(simpleMessages == null) simpleMessages = new HashMap<>();
+        if (messages == null) messages = new HashMap<>();
+        if (simpleMessages == null) simpleMessages = new HashMap<>();
 
         if (section == null) {
             logger.warning("[LangAPI] Missing messages section!");
