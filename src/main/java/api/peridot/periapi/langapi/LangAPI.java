@@ -36,7 +36,7 @@ public class LangAPI {
         message.broadcast(replacements);
     }
 
-    public void sendMessage(String id, Player player, Replacement... replacements) {
+    public void sendMessage(Player player, String id, Replacement... replacements) {
         LangMessage message = getMessage(id);
         message.send(player, replacements);
     }
