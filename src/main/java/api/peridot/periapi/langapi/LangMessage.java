@@ -2,8 +2,10 @@ package api.peridot.periapi.langapi;
 
 import api.peridot.periapi.packets.NotificationPackets;
 import api.peridot.periapi.packets.PacketSender;
+import api.peridot.periapi.utils.ColorUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -13,44 +15,46 @@ import java.util.stream.Collectors;
 
 public class LangMessage {
 
-    private boolean useChat;
+    private boolean useChat = false;
+    private boolean useChatIfNotPlayer = false;
     private List<String> chatContent = new ArrayList<>();
 
-    private boolean useTitle;
-    private String titleContent;
-    private String subtitleContent;
-    private int fadeIn;
-    private int stay;
-    private int fadeOut;
+    private boolean useTitle = false;
+    private String titleContent = "";
+    private String subtitleContent = "";
+    private int fadeIn = 0;
+    private int stay = 0;
+    private int fadeOut = 0;
 
-    private boolean useActionBar;
-    private String actionBarContent;
+    private boolean useActionBar = false;
+    private String actionBarContent = "";
 
     public LangMessage(ConfigurationSection section) {
-
-        useChat = section.getBoolean("chat-enabled");
-        if (useChat) {
-            if (section.isString("chat.content")) {
-                chatContent.add(color(section.getString("chat.content")));
-            } else if (section.isList("chat.content")) {
-                chatContent = section.getStringList("chat.content").stream()
-                        .map(LangMessage::color).collect(Collectors.toList());
+        try {
+            useChat = section.getBoolean("chat.enabled");
+            useChatIfNotPlayer = section.getBoolean("chat.send-if-not-player");
+            if (useChat || useChatIfNotPlayer) {
+                if (section.isString("chat.content")) {
+                    chatContent.add(ColorUtil.color(section.getString("chat.content")));
+                } else if (section.isList("chat.content")) {
+                    chatContent = ColorUtil.color(section.getStringList("chat.content"));
+                }
             }
-        }
 
-        useTitle = section.getBoolean("title-enabled");
-        if (useTitle) {
-            titleContent = color(section.getString("title.content"));
-            subtitleContent = color(section.getString("title.sub-content"));
-            fadeIn = section.getInt("title.fade-in");
-            stay = section.getInt("title.stay");
-            fadeOut = section.getInt("title.fade-out");
-        }
+            useTitle = section.getBoolean("title.enabled");
+            if (useTitle) {
+                titleContent = ColorUtil.color(section.getString("title.content"));
+                subtitleContent = ColorUtil.color(section.getString("title.sub-content"));
+                fadeIn = section.getInt("title.fade-in");
+                stay = section.getInt("title.stay");
+                fadeOut = section.getInt("title.fade-out");
+            }
 
-        useActionBar = section.getBoolean("actionbar-enabled");
-        if (useActionBar) {
-            actionBarContent = color(section.getString("actionbar.content"));
-        }
+            useActionBar = section.getBoolean("actionbar.enabled");
+            if (useActionBar) {
+                actionBarContent = ColorUtil.color(section.getString("actionbar.content"));
+            }
+        } catch (Exception ignored) { }
     }
 
     public void broadcast(Replacement... replacements) {
@@ -59,23 +63,30 @@ public class LangMessage {
         }
     }
 
-    public void send(Player player, Replacement... replacements) {
-        if (useChat) {
-            getChatContent(replacements).forEach(player::sendMessage);
+    public void send(CommandSender sender, Replacement... replacements) {
+        if (useChat || (!(sender instanceof Player) && useChatIfNotPlayer)) {
+            getChatContent(replacements).forEach(sender::sendMessage);
         }
-        if (useTitle) {
-            String titleMsg = getTitleContent(replacements);
-            String subtitleMsg = getSubtitleContent(replacements);
-            PacketSender.sendPacket(player, NotificationPackets.createTitlePacket(titleMsg, subtitleMsg, fadeIn, stay, fadeOut));
-        }
-        if (useActionBar) {
-            String actionBarMsg = getActionBarContent(replacements);
-            PacketSender.sendPacket(player, NotificationPackets.createActionBarPacket(actionBarMsg));
+        if(sender instanceof Player) {
+            Player player = (Player) sender;
+            if (useTitle) {
+                String titleMsg = getTitleContent(replacements);
+                String subtitleMsg = getSubtitleContent(replacements);
+                PacketSender.sendPacket(player, NotificationPackets.createTitlePacket(titleMsg, subtitleMsg, fadeIn, stay, fadeOut));
+            }
+            if (useActionBar) {
+                String actionBarMsg = getActionBarContent(replacements);
+                PacketSender.sendPacket(player, NotificationPackets.createActionBarPacket(actionBarMsg));
+            }
         }
     }
 
     public boolean useChat() {
         return useChat;
+    }
+
+    public boolean useChatIfNotPlayer() {
+        return useChatIfNotPlayer;
     }
 
     public List<String> getChatContent(Replacement... replacements) {
@@ -114,16 +125,11 @@ public class LangMessage {
         return replace(actionBarContent, replacements);
     }
 
-    public static String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
-    }
-
-    public static String replace(String msg, Replacement... replacements) {
+    public String replace(String msg, Replacement... replacements) {
         String toReturn = msg;
         for (Replacement r : replacements) {
-            toReturn = toReturn.replace(r.getFrom(), r.getTo());
+            toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());
         }
-
         return toReturn;
     }
 }
