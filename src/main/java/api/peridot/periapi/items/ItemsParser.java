@@ -53,7 +53,7 @@ public class ItemsParser {
             if (!bookEnchantments.isEmpty()) item.addUnsafeBookEnchantments(bookEnchantments);
             if (skullOwner != null && !skullOwner.isEmpty()) item.setSkullOwner(skullOwner);
             if (skullTexture != null && !skullTexture.isEmpty()) item.setCustomSkullOwner(skullTexture);
-            if (color == null) item.setLeatherArmorColor(color);
+            if (itemSection.getConfigurationSection("color") != null) item.setLeatherArmorColor(color);
 
             items.put(id, item);
         }
