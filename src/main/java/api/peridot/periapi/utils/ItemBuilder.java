@@ -43,6 +43,11 @@ public class ItemBuilder {
         return new ItemBuilder(itemStack);
     }
 
+    public ItemBuilder setAmount(int amount) {
+        this.itemStack.setAmount(amount);
+        return this;
+    }
+
     public ItemBuilder setDurability(short durability) {
         this.itemStack.setDurability(durability);
         return this;
