@@ -19,6 +19,7 @@ import java.util.UUID;
 public class ItemBuilder {
 
     private ItemStack itemStack;
+    private ItemMeta itemMeta;
 
     public ItemBuilder(Material material) {
         this(material, 1);
@@ -35,6 +36,7 @@ public class ItemBuilder {
 
     public ItemBuilder(ItemStack itemStack) {
         this.itemStack = itemStack;
+        this.itemMeta = itemStack.getItemMeta();
     }
 
     public ItemBuilder clone() {
@@ -42,32 +44,22 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setDurability(short durability) {
-        itemStack.setDurability(durability);
-
+        this.itemStack.setDurability(durability);
         return this;
     }
 
     public ItemBuilder setUnbreakable() {
-        itemStack.setDurability(Short.MAX_VALUE);
-
+        this.itemStack.setDurability(Short.MAX_VALUE);
         return this;
     }
 
     public ItemBuilder setName(String name) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.setDisplayName(name);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.setDisplayName(name);
         return this;
     }
 
     public ItemBuilder setLore(List<String> lore) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.setLore(lore);
         return this;
     }
 
@@ -76,92 +68,56 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addLoreLine(String line) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        List<String> lore = itemMeta.hasLore() ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
+        List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         lore.add(line);
-
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.setLore(lore);
         return this;
     }
 
     public ItemBuilder addLoreLine(String line, int lineIndex) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        List<String> lore = itemMeta.hasLore() ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
+        List<String> lore = itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         lore.set(lineIndex, line);
-
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.setLore(lore);
         return this;
     }
 
     public ItemBuilder removeLoreLine(String line) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        List<String> lore = itemMeta.hasLore() ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
+        List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         if(!lore.contains(line)) return this;
         lore.remove(line);
-
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-
         return this;
     }
 
     public ItemBuilder removeLoreLine(int lineIndex) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        List<String> lore = itemMeta.hasLore() ? new ArrayList<>(itemMeta.getLore()) : new ArrayList<>();
+        List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         if(lineIndex < 0 || lineIndex > lore.size()) return this;
         lore.remove(lineIndex);
-
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-
         return this;
     }
 
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.addEnchant(enchantment, level, false);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.addEnchant(enchantment, level, false);
         return this;
     }
 
     public ItemBuilder addUnsafeEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
-
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.addEnchant(enchantment, level, true);
-        itemStack.setItemMeta(itemMeta);
-
+        this.itemMeta.addEnchant(enchantment, level, true);
         return this;
     }
 
     public ItemBuilder removeEnchantment(Enchantment enchantment) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.removeEnchant(enchantment);
-        itemStack.setItemMeta(itemMeta);
-
         return this;
     }
 
     public ItemBuilder addBookEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
         try {
-            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.addStoredEnchant(enchantment, level, false);
-            itemStack.setItemMeta(enchantmentStorageMeta);
+            this.itemMeta = enchantmentStorageMeta;
         } catch (Exception ignored) { }
         return this;
     }
@@ -169,34 +125,34 @@ public class ItemBuilder {
     public ItemBuilder addUnsafeBookEnchantment(Enchantment enchantment, int level) {
         Validate.isTrue(level >= 1, "Enchantment level must be equal or greater 1");
         try {
-            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.addStoredEnchant(enchantment, level, true);
-            itemStack.setItemMeta(enchantmentStorageMeta);
+            this.itemMeta = enchantmentStorageMeta;
         } catch (Exception ignored) { }
         return this;
     }
 
     public ItemBuilder removeBookEnchantment(Enchantment enchantment) {
         try {
-            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) itemStack.getItemMeta();
+            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.removeStoredEnchant(enchantment);
-            itemStack.setItemMeta(enchantmentStorageMeta);
+            this.itemMeta = enchantmentStorageMeta;
         } catch (Exception ignored) { }
         return this;
     }
 
     public ItemBuilder setSkullOwner(String skullOwner) {
         try {
-            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
             skullMeta.setOwner(skullOwner);
-            itemStack.setItemMeta(skullMeta);
+            this.itemMeta = skullMeta;
         } catch (Exception ignored) { }
         return this;
     }
 
     public ItemBuilder setCustomSkullOwner(String url) {
         try {
-            SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
+            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
             GameProfile profile = new GameProfile(UUID.randomUUID(), null);
             profile.getProperties().put("textures", new Property("textures", url));
@@ -204,21 +160,21 @@ public class ItemBuilder {
             profileField.setAccessible(true);
             profileField.set(skullMeta, profile);
 
-            itemStack.setItemMeta(skullMeta);
+            this.itemMeta = skullMeta;
         } catch (Exception ignored) { }
         return this;
     }
 
     @Deprecated
     public ItemBuilder setDyeColor(DyeColor color) {
-        itemStack.setDurability(color.getDyeData());
+        this.itemStack.setDurability(color.getDyeData());
         return this;
     }
 
     @Deprecated
     public ItemBuilder setWoolColor(DyeColor color) {
         if(itemStack.getType().name().contains("WOOL")) return this;
-        itemStack.setDurability(color.getWoolData());
+        this.itemStack.setDurability(color.getWoolData());
         return this;
     }
 
@@ -226,12 +182,13 @@ public class ItemBuilder {
         try {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
             leatherArmorMeta.setColor(color);
-            itemStack.setItemMeta(leatherArmorMeta);
+            this.itemMeta = leatherArmorMeta;
         } catch (Exception ignored) { }
         return this;
     }
 
     public ItemStack build() {
+        itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
