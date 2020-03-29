@@ -37,12 +37,16 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(ItemStack itemStack) {
+        this(itemStack, itemStack.getItemMeta());
+    }
+
+    private ItemBuilder(ItemStack itemStack, ItemMeta itemMeta) {
         this.itemStack = itemStack;
-        this.itemMeta = itemStack.getItemMeta();
+        this.itemMeta = itemMeta;
     }
 
     public ItemBuilder clone() {
-        return new ItemBuilder(itemStack);
+        return new ItemBuilder(itemStack.clone(), itemMeta.clone());
     }
 
     public ItemBuilder setDurability(short durability) {
@@ -106,6 +110,7 @@ public class ItemBuilder {
         for (int i = 0; i < lore.size(); i++) {
             lore.set(i, replace(lore.get(i), replacements));
         }
+        this.itemMeta.setLore(lore);
         return this;
     }
 
@@ -132,7 +137,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder removeEnchantment(Enchantment enchantment) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
+        this.itemMeta.removeEnchant(enchantment);
         return this;
     }
 
