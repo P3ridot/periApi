@@ -10,7 +10,10 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -87,21 +90,21 @@ public class ItemBuilder {
 
     public ItemBuilder removeLoreLine(String line) {
         List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
-        if(!lore.contains(line)) return this;
+        if (!lore.contains(line)) return this;
         lore.remove(line);
         return this;
     }
 
     public ItemBuilder removeLoreLine(int lineIndex) {
         List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
-        if(lineIndex < 0 || lineIndex > lore.size()) return this;
+        if (lineIndex < 0 || lineIndex > lore.size()) return this;
         lore.remove(lineIndex);
         return this;
     }
 
     public ItemBuilder replaceInLore(Replacement... replacements) {
         List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
-        for(int i = 0; i < lore.size(); i++) {
+        for (int i = 0; i < lore.size(); i++) {
             lore.set(i, replace(lore.get(i), replacements));
         }
         return this;
@@ -140,7 +143,8 @@ public class ItemBuilder {
             EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.addStoredEnchant(enchantment, level, false);
             this.itemMeta = enchantmentStorageMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -155,7 +159,8 @@ public class ItemBuilder {
             EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.addStoredEnchant(enchantment, level, true);
             this.itemMeta = enchantmentStorageMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -169,7 +174,8 @@ public class ItemBuilder {
             EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) this.itemMeta;
             enchantmentStorageMeta.removeStoredEnchant(enchantment);
             this.itemMeta = enchantmentStorageMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -178,7 +184,8 @@ public class ItemBuilder {
             SkullMeta skullMeta = (SkullMeta) this.itemMeta;
             skullMeta.setOwner(skullOwner);
             this.itemMeta = skullMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -193,7 +200,8 @@ public class ItemBuilder {
             profileField.set(skullMeta, profile);
 
             this.itemMeta = skullMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -205,7 +213,7 @@ public class ItemBuilder {
 
     @Deprecated
     public ItemBuilder setWoolColor(DyeColor color) {
-        if(itemStack.getType().name().contains("WOOL")) return this;
+        if (itemStack.getType().name().contains("WOOL")) return this;
         this.itemStack.setDurability(color.getWoolData());
         return this;
     }
@@ -215,7 +223,8 @@ public class ItemBuilder {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
             leatherArmorMeta.setColor(color);
             this.itemMeta = leatherArmorMeta;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return this;
     }
 

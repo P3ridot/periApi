@@ -29,7 +29,7 @@ public class ItemsParser {
     public ItemBuilder getItemBuilder(String id) {
         ItemBuilder item = items.get(id);
 
-        if(item == null) {
+        if (item == null) {
             ConfigurationSection itemSection = section.getConfigurationSection(id);
 
             Material material = Material.matchMaterial(itemSection.getString("material"));
@@ -67,7 +67,7 @@ public class ItemsParser {
 
     private Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
         Map<Enchantment, Integer> enchantmentsMap = new HashMap<>();
-        for(String enchantmentString : enchantments) {
+        for (String enchantmentString : enchantments) {
             try {
                 String[] splitedEnchantment = enchantmentString.split(":", 2);
 
@@ -75,7 +75,8 @@ public class ItemsParser {
                 int level = Integer.parseInt(splitedEnchantment[1]);
 
                 enchantmentsMap.put(enchantment, level);
-            } catch (Exception ex) { }
+            } catch (Exception ex) {
+            }
         }
 
         return enchantmentsMap;
