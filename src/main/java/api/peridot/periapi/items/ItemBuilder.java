@@ -59,7 +59,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder replaceInName(Replacement replacements) {
+    public ItemBuilder replaceInName(Replacement... replacements) {
         this.itemMeta.setDisplayName(replace(this.itemMeta.getDisplayName(), replacements));
         return this;
     }
