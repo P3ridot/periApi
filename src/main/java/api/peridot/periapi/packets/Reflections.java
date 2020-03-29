@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 public class Reflections {
 
     public static String server_version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-    ;
     public static final boolean use_pre_12_methods = Integer.parseInt(server_version.split("_")[1]) < 12;
 
     public static Class<?> getNMSClass(String name) {
