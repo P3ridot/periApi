@@ -1,5 +1,6 @@
 package api.peridot.periapi.inventories.items;
 
+import api.peridot.periapi.items.ItemBuilder;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,6 +61,11 @@ public class InventoryItem {
 
         public Builder item(ItemStack item) {
             this.item = item;
+            return this;
+        }
+
+        public Builder item(ItemBuilder item) {
+            this.item = item.clone().build();
             return this;
         }
 
