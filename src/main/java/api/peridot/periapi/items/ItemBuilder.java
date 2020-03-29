@@ -58,6 +58,7 @@ public class ItemBuilder {
         this.itemStack.setAmount(amount);
         return this;
     }
+
     public ItemBuilder setName(String name) {
         this.itemMeta.setDisplayName(name);
         return this;
