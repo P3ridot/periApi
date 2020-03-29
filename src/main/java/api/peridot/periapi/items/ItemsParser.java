@@ -33,7 +33,7 @@ public class ItemsParser {
             ConfigurationSection itemSection = section.getConfigurationSection(id);
 
             Material material = Material.matchMaterial(itemSection.getString("material"));
-            boolean unbreakable = itemSection.getBoolean("unbreakable");
+            short durability = (short) itemSection.getInt("durability");
             int amount = Math.max(itemSection.getInt("amount"), 1);
 
             String name = ColorUtil.color(itemSection.getString("name"));
@@ -46,7 +46,7 @@ public class ItemsParser {
 
             item = new ItemBuilder(material, amount);
 
-            if (unbreakable) item.setUnbreakable();
+            if (durability != 0) item.setDurability(durability);
             if (!name.isEmpty()) item.setName(name);
             if (!lore.isEmpty() && !(lore.size() == 1 && lore.get(0).isEmpty())) item.setLore(lore);
             if (!enchantments.isEmpty()) item.addUnsafeEnchantments(enchantments);

@@ -45,16 +45,15 @@ public class ItemBuilder {
         return new ItemBuilder(itemStack);
     }
 
+    public ItemBuilder setDurability(short durability) {
+        this.itemStack.setDurability(durability);
+        return this;
+    }
+
     public ItemBuilder setAmount(int amount) {
         this.itemStack.setAmount(amount);
         return this;
     }
-
-    public ItemBuilder setUnbreakable() {
-        this.itemStack.setDurability(Short.MIN_VALUE);
-        return this;
-    }
-
     public ItemBuilder setName(String name) {
         this.itemMeta.setDisplayName(name);
         return this;
