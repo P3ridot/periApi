@@ -22,6 +22,8 @@ public class LangAPI {
         reload();
     }
 
+    /* Getting or Creating messages */
+
     public LangMessage getMessage(String id) {
         LangMessage message = messages.get(id);
 
@@ -44,6 +46,8 @@ public class LangAPI {
         return message;
     }
 
+    /* Sending */
+
     public void broadcast(String id, Replacement... replacements) {
         LangMessage message = getMessage(id);
         message.broadcast(replacements);
@@ -63,6 +67,8 @@ public class LangAPI {
         SimpleLangMessage message = getSimpleMessage(id);
         message.send(sender, replacements);
     }
+
+    /* Reload */
 
     public void reload() {
         if (section == null) {

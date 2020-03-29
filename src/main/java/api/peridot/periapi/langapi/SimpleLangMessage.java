@@ -28,6 +28,8 @@ public class SimpleLangMessage {
         }
     }
 
+    /* Sending */
+
     public void broadcast(Replacement... replacements) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             send(player, replacements);
@@ -40,6 +42,8 @@ public class SimpleLangMessage {
         }
     }
 
+    /* Chat */
+
     public boolean useChat() {
         return useChat;
     }
@@ -47,6 +51,8 @@ public class SimpleLangMessage {
     public List<String> getChatContent(Replacement... replacements) {
         return chatContent.stream().map(s -> replace(s, replacements)).collect(Collectors.toList());
     }
+
+    /* Utils */
 
     public String replace(String msg, Replacement... replacements) {
         String toReturn = msg;

@@ -58,6 +58,8 @@ public class LangMessage {
         }
     }
 
+    /* Sending */
+
     public void broadcast(Replacement... replacements) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             send(player, replacements);
@@ -82,6 +84,8 @@ public class LangMessage {
         }
     }
 
+    /* Chat */
+
     public boolean useChat() {
         return useChat;
     }
@@ -93,6 +97,8 @@ public class LangMessage {
     public List<String> getChatContent(Replacement... replacements) {
         return chatContent.stream().map(s -> replace(s, replacements)).collect(Collectors.toList());
     }
+
+    /* Title */
 
     public boolean useTitle() {
         return useTitle;
@@ -118,6 +124,8 @@ public class LangMessage {
         return fadeOut;
     }
 
+    /* Actionbar */
+
     public boolean useActionBar() {
         return useActionBar;
     }
@@ -126,7 +134,9 @@ public class LangMessage {
         return replace(actionBarContent, replacements);
     }
 
-    public String replace(String msg, Replacement... replacements) {
+    /* Utils */
+
+    private String replace(String msg, Replacement... replacements) {
         String toReturn = msg;
         for (Replacement r : replacements) {
             toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());

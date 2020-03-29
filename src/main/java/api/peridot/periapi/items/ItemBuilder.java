@@ -1,7 +1,9 @@
 package api.peridot.periapi.items;
 
+import api.peridot.periapi.langapi.Replacement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -55,6 +57,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder replaceInName(Replacement replacements) {
+        this.itemMeta.setDisplayName(replace(this.itemMeta.getDisplayName(), replacements));
+        return this;
+    }
+
     public ItemBuilder setLore(List<String> lore) {
         this.itemMeta.setLore(lore);
         return this;
@@ -89,6 +96,14 @@ public class ItemBuilder {
         List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         if(lineIndex < 0 || lineIndex > lore.size()) return this;
         lore.remove(lineIndex);
+        return this;
+    }
+
+    public ItemBuilder replaceInLore(Replacement... replacements) {
+        List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
+        for(int i = 0; i < lore.size(); i++) {
+            lore.set(i, replace(lore.get(i), replacements));
+        }
         return this;
     }
 
@@ -207,6 +222,14 @@ public class ItemBuilder {
     public ItemStack build() {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    private String replace(String msg, Replacement... replacements) {
+        String toReturn = msg;
+        for (Replacement r : replacements) {
+            toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());
+        }
+        return toReturn;
     }
 
 }
