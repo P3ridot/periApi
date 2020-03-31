@@ -13,9 +13,7 @@ import java.util.Map;
 
 public class ItemsParser {
 
-    private ItemsParser() { }
-
-    public ItemBuilder getItemBuilder(ConfigurationSection section) {
+    public final ItemBuilder getItemBuilder(ConfigurationSection section) {
         if (section == null) return null;
 
         Material material = Material.matchMaterial(section.getString("material"));
@@ -44,7 +42,7 @@ public class ItemsParser {
         return item;
     }
 
-    public ItemStack getItem(ConfigurationSection section) {
+    public final ItemStack getItem(ConfigurationSection section) {
         return getItemBuilder(section).build();
     }
 
