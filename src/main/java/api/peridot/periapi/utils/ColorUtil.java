@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 public class ColorUtil {
 
+    private ColorUtil() {
+    }
+
     public static String color(String string) {
         if (string == null || string.isEmpty()) return "";
         return ChatColor.translateAlternateColorCodes('&', string);
