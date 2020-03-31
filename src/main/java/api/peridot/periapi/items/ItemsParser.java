@@ -13,7 +13,9 @@ import java.util.Map;
 
 public class ItemsParser {
 
-    public ItemBuilder getItemBuilder(ConfigurationSection section) {
+    private ItemsParser() { }
+
+    public static ItemBuilder getItemBuilder(ConfigurationSection section) {
         if (section == null) return null;
 
         Material material = Material.matchMaterial(section.getString("material"));
@@ -42,11 +44,11 @@ public class ItemsParser {
         return item;
     }
 
-    public ItemStack getItem(ConfigurationSection section) {
+    public static ItemStack getItem(ConfigurationSection section) {
         return getItemBuilder(section).build();
     }
 
-    private Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
+    private static Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
         Map<Enchantment, Integer> enchantmentsMap = new HashMap<>();
         for (String enchantmentString : enchantments) {
             try {
