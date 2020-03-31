@@ -19,28 +19,20 @@ public class ItemsParser {
     public static ItemBuilder getItemBuilder(ConfigurationSection section) {
         if (section == null) return null;
 
-        Material material = Material.matchMaterial(section.getString("material"));
-        short durability = (short) section.getInt("durability");
-        int amount = Math.max(section.getInt("amount"), 1);
+        ItemBuilder item = new ItemBuilder(Material.matchMaterial(section.getString("material")), Math.max(section.getInt("amount"), 1));
 
         String name = ColorUtil.color(section.getString("name"));
         List<String> lore = ColorUtil.color(section.getStringList("lore"));
-        Map<Enchantment, Integer> enchantments = parseEnchantments(section.getStringList("enchantments"));
-        Map<Enchantment, Integer> bookEnchantments = parseEnchantments(section.getStringList("book-enchantments"));
-        String skullOwner = section.getString("skull-owner");
-        String skullTexture = section.getString("skull-texture");
-        Color color = Color.fromRGB(section.getInt("color.red"), section.getInt("color.green"), section.getInt("color.blue"));
 
-        ItemBuilder item = new ItemBuilder(material, amount);
-
-        if (durability != 0) item.setDurability(durability);
         if (!name.isEmpty()) item.setName(name);
         if (!lore.isEmpty() && !(lore.size() == 1 && lore.get(0).isEmpty())) item.setLore(lore);
-        if (!enchantments.isEmpty()) item.addUnsafeEnchantments(enchantments);
-        if (!bookEnchantments.isEmpty()) item.addUnsafeBookEnchantments(bookEnchantments);
-        if (skullOwner != null && !skullOwner.isEmpty()) item.setSkullOwner(skullOwner);
-        if (skullTexture != null && !skullTexture.isEmpty()) item.setCustomSkullOwner(skullTexture);
-        if (section.getConfigurationSection("color") != null) item.setLeatherArmorColor(color);
+
+        item.setDurability((short) section.getInt("durability"));
+        item.addUnsafeEnchantments(parseEnchantments(section.getStringList("enchantments")));
+        item.addUnsafeBookEnchantments(parseEnchantments(section.getStringList("book-enchantments")));
+        item.setSkullOwner(section.getString("skull-owner"));
+        item.setCustomSkullOwner(section.getString("skull-texture"));
+        item.setLeatherArmorColor(Color.fromRGB(section.getInt("color.red"), section.getInt("color.green"), section.getInt("color.blue")));
 
         return item;
     }
