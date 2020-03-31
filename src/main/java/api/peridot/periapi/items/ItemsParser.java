@@ -15,7 +15,7 @@ public class ItemsParser {
 
     private ItemsParser() { }
 
-    public static ItemBuilder getItemBuilder(ConfigurationSection section) {
+    public ItemBuilder getItemBuilder(ConfigurationSection section) {
         if (section == null) return null;
 
         Material material = Material.matchMaterial(section.getString("material"));
@@ -44,11 +44,11 @@ public class ItemsParser {
         return item;
     }
 
-    public static ItemStack getItem(ConfigurationSection section) {
+    public ItemStack getItem(ConfigurationSection section) {
         return getItemBuilder(section).build();
     }
 
-    private static Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
+    private Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
         Map<Enchantment, Integer> enchantmentsMap = new HashMap<>();
         for (String enchantmentString : enchantments) {
             try {
