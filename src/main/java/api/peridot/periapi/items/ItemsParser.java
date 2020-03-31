@@ -1,7 +1,6 @@
 package api.peridot.periapi.items;
 
 import api.peridot.periapi.utils.ColorUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,58 +10,40 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class ItemsParser {
 
-    private final ConfigurationSection section;
-    private final Logger logger;
+    public ItemBuilder getItemBuilder(ConfigurationSection section) {
+        if (section == null) return null;
 
-    private final Map<String, ItemBuilder> items = new HashMap<>();
+        Material material = Material.matchMaterial(section.getString("material"));
+        short durability = (short) section.getInt("durability");
+        int amount = Math.max(section.getInt("amount"), 1);
 
-    public ItemsParser(ConfigurationSection section) {
-        this.section = section;
-        this.logger = Bukkit.getLogger();
-        reload();
-    }
+        String name = ColorUtil.color(section.getString("name"));
+        List<String> lore = ColorUtil.color(section.getStringList("lore"));
+        Map<Enchantment, Integer> enchantments = parseEnchantments(section.getStringList("enchantments"));
+        Map<Enchantment, Integer> bookEnchantments = parseEnchantments(section.getStringList("book-enchantments"));
+        String skullOwner = section.getString("skull-owner");
+        String skullTexture = section.getString("skull-texture");
+        Color color = Color.fromRGB(section.getInt("color.red"), section.getInt("color.green"), section.getInt("color.blue"));
 
-    public ItemBuilder getItemBuilder(String id) {
-        ItemBuilder item = items.get(id);
+        ItemBuilder item = new ItemBuilder(material, amount);
 
-        if (item == null) {
-            ConfigurationSection itemSection = section.getConfigurationSection(id);
-
-            Material material = Material.matchMaterial(itemSection.getString("material"));
-            short durability = (short) itemSection.getInt("durability");
-            int amount = Math.max(itemSection.getInt("amount"), 1);
-
-            String name = ColorUtil.color(itemSection.getString("name"));
-            List<String> lore = ColorUtil.color(itemSection.getStringList("lore"));
-            Map<Enchantment, Integer> enchantments = parseEnchantments(itemSection.getStringList("enchantments"));
-            Map<Enchantment, Integer> bookEnchantments = parseEnchantments(itemSection.getStringList("book-enchantments"));
-            String skullOwner = itemSection.getString("skull-owner");
-            String skullTexture = itemSection.getString("skull-texture");
-            Color color = Color.fromRGB(itemSection.getInt("color.red"), itemSection.getInt("color.green"), itemSection.getInt("color.blue"));
-
-            item = new ItemBuilder(material, amount);
-
-            if (durability != 0) item.setDurability(durability);
-            if (!name.isEmpty()) item.setName(name);
-            if (!lore.isEmpty() && !(lore.size() == 1 && lore.get(0).isEmpty())) item.setLore(lore);
-            if (!enchantments.isEmpty()) item.addUnsafeEnchantments(enchantments);
-            if (!bookEnchantments.isEmpty()) item.addUnsafeBookEnchantments(bookEnchantments);
-            if (skullOwner != null && !skullOwner.isEmpty()) item.setSkullOwner(skullOwner);
-            if (skullTexture != null && !skullTexture.isEmpty()) item.setCustomSkullOwner(skullTexture);
-            if (itemSection.getConfigurationSection("color") != null) item.setLeatherArmorColor(color);
-
-            items.put(id, item);
-        }
+        if (durability != 0) item.setDurability(durability);
+        if (!name.isEmpty()) item.setName(name);
+        if (!lore.isEmpty() && !(lore.size() == 1 && lore.get(0).isEmpty())) item.setLore(lore);
+        if (!enchantments.isEmpty()) item.addUnsafeEnchantments(enchantments);
+        if (!bookEnchantments.isEmpty()) item.addUnsafeBookEnchantments(bookEnchantments);
+        if (skullOwner != null && !skullOwner.isEmpty()) item.setSkullOwner(skullOwner);
+        if (skullTexture != null && !skullTexture.isEmpty()) item.setCustomSkullOwner(skullTexture);
+        if (section.getConfigurationSection("color") != null) item.setLeatherArmorColor(color);
 
         return item;
     }
 
-    public ItemStack getItem(String id) {
-        return getItemBuilder(id).build();
+    public ItemStack getItem(ConfigurationSection section) {
+        return getItemBuilder(section).build();
     }
 
     private Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
@@ -80,18 +61,5 @@ public class ItemsParser {
         }
 
         return enchantmentsMap;
-    }
-
-    public void reload() {
-        if (section == null) {
-            logger.warning("[LangAPI] Missing messages section!");
-            return;
-        }
-
-        if (!items.isEmpty()) {
-            items.keySet().forEach(id -> {
-                items.put(id, getItemBuilder(id));
-            });
-        }
     }
 }
