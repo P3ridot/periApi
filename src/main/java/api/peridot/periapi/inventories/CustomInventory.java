@@ -134,7 +134,7 @@ public class CustomInventory {
         private String title = "";
         private int rows = 6;
         private boolean closeable = true;
-        private int updateDelay = 1;
+        private int updateDelay = -1;
 
         private Plugin plugin;
         private PeriInventoryManager manager;

@@ -43,7 +43,7 @@ public class InventoryClickListener implements Listener {
                 ItemStack item = inventoryItem.getItem();
 
                 if (item == null || item.getType() == Material.AIR) continue;
-                if (!clickedItem.isSimilar(item)) continue;
+                if (!inventoryItem.compareTo(clickedItem)) continue;
 
                 inventoryItem.run(event);
 

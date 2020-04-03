@@ -1,11 +1,11 @@
 group 'api.peridot.periapi'
-version '0.9.4'
+version '0.9.5'
 
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
-jar{
+jar {
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
