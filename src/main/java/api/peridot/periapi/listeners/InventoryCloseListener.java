@@ -29,7 +29,9 @@ public class InventoryCloseListener implements Listener {
 
         for (CustomInventory customInventory : periApi.getInventoryManager().getInventories()) {
             if (!customInventory.getInventory(player).equals(event.getInventory())) continue;
+
             if (customInventory.isCloseable()) {
+                customInventory.setOpenedPageIndex(player, -1);
                 customInventory.getPersonalInventoryData(player).setUpdateTask(null);
                 return;
             }

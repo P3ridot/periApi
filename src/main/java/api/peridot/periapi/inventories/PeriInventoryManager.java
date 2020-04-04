@@ -3,7 +3,8 @@ package api.peridot.periapi.inventories;
 import api.peridot.periapi.PeriAPI;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PeriInventoryManager {
 
@@ -23,29 +24,6 @@ public class PeriInventoryManager {
 
     public PeriAPI getPeriApi() {
         return periApi;
-    }
-
-    @Deprecated
-    private static final Map<String, CustomInventory> inventoriesMap = new HashMap<>();
-
-    @Deprecated
-    public CustomInventory getMapInventory(String id) {
-        return inventoriesMap.get(id);
-    }
-
-    @Deprecated
-    public Set<String> getMapInventoriesIdList() {
-        return inventoriesMap.keySet();
-    }
-
-    @Deprecated
-    public Collection<CustomInventory> getMapInventoriesList() {
-        return inventoriesMap.values();
-    }
-
-    @Deprecated
-    public void addMapInventory(String id, CustomInventory inventory) {
-        inventoriesMap.put(id, inventory);
     }
 
     public List<CustomInventory> getInventories() {

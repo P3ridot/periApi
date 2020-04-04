@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class LangAPI {
@@ -13,8 +13,8 @@ public class LangAPI {
     private final ConfigurationSection section;
     private final Logger logger;
 
-    private final Map<String, LangMessage> messages = new HashMap<>();
-    private final Map<String, SimpleLangMessage> simpleMessages = new HashMap<>();
+    private final Map<String, LangMessage> messages = new ConcurrentHashMap<>();
+    private final Map<String, SimpleLangMessage> simpleMessages = new ConcurrentHashMap<>();
 
     public LangAPI(ConfigurationSection section) {
         this.section = section;
