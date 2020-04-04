@@ -91,8 +91,9 @@ public class CustomInventory {
     }
 
     public void setOpenedPageIndex(Player player, int page) {
-        Validate.isTrue(page >= 1, "Page value must be bigger or equal 1");
         Validate.isTrue(page <= pagination.pagesAmount(), "Page value must be smaller or equal amount of pages");
+        if(page <= 0) page = -1;
+
         openedPageMap.put(player.getUniqueId(), page);
     }
 
