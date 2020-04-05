@@ -37,11 +37,13 @@ public class InventoryClickListener implements Listener {
 
             if (content == null) return;
             if (content.isEmpty()) return;
-            for (InventoryItem inventoryItem : content.getItems()) {
+            for (int slot : content.getInventoryItemsMap().keySet()) {
+                InventoryItem inventoryItem = content.getItem(slot);
                 ItemStack item = inventoryItem.getItem();
 
                 if (item == null || item.getType() == Material.AIR) continue;
-                if (!inventoryItem.compareTo(clickedItem)) continue;
+                if (slot != event.getSlot()) continue;
+                ;
 
                 inventoryItem.run(event);
 

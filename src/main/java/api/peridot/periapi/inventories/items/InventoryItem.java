@@ -5,21 +5,18 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class InventoryItem {
 
     private final ItemStack item;
     private final Consumer<InventoryClickEvent> consumer;
-    private final BiFunction<ItemStack, ItemStack, Boolean> comparison;
     private boolean cancel = true;
     private boolean update = false;
 
-    private InventoryItem(ItemStack item, Consumer<InventoryClickEvent> consumer, BiFunction<ItemStack, ItemStack, Boolean> comprasion, boolean cancel, boolean update) {
+    private InventoryItem(ItemStack item, Consumer<InventoryClickEvent> consumer, boolean cancel, boolean update) {
         this.item = item;
         this.consumer = consumer;
-        this.comparison = comprasion;
         this.cancel = cancel;
         this.update = update;
     }
@@ -35,14 +32,6 @@ public class InventoryItem {
 
     public void run(InventoryClickEvent event) {
         consumer.accept(event);
-    }
-
-    public BiFunction<ItemStack, ItemStack, Boolean> getComparison() {
-        return comparison;
-    }
-
-    public boolean compareTo(ItemStack item) {
-        return comparison.apply(this.item, item);
     }
 
     public boolean isCancel() {
@@ -69,7 +58,6 @@ public class InventoryItem {
         private ItemStack item;
         private Consumer<InventoryClickEvent> consumer = event -> {
         };
-        private BiFunction<ItemStack, ItemStack, Boolean> comparison = ItemStack::isSimilar;
         private boolean cancel = true;
         private boolean update = false;
 
@@ -88,11 +76,6 @@ public class InventoryItem {
             return this;
         }
 
-        public Builder comparison(BiFunction<ItemStack, ItemStack, Boolean> comparison) {
-            this.comparison = comparison;
-            return this;
-        }
-
         public Builder cancel(boolean cancel) {
             this.cancel = cancel;
             return this;
@@ -104,7 +87,7 @@ public class InventoryItem {
         }
 
         public InventoryItem build() {
-            return new InventoryItem(item, consumer, comparison, cancel, update);
+            return new InventoryItem(item, consumer, cancel, update);
         }
     }
 }
