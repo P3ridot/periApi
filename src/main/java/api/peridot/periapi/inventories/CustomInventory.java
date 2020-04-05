@@ -1,7 +1,6 @@
 package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.providers.InventoryProvider;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -23,16 +22,15 @@ public class CustomInventory {
     private int updateDelay;
 
     private InventoryProvider provider;
-    private Pagination pagination;
-    private boolean paginated;
+    private InventoryContent content;
 
     private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
-    private final Map<UUID, Integer> openedPageMap = new ConcurrentHashMap<>();
 
-    private CustomInventory(Plugin plugin, PeriInventoryManager manager) {
+    private CustomInventory(Plugin plugin, PeriInventoryManager manager, int rows) {
         this.plugin = plugin;
         this.manager = manager;
-        this.pagination = new Pagination(new InventoryContent());
+        this.rows = rows;
+        this.content = new InventoryContent(rows);
         manager.addInventory(this);
     }
 
@@ -64,65 +62,37 @@ public class CustomInventory {
         return provider;
     }
 
-    public Pagination getPagination() {
-        return pagination;
-    }
-
-    public boolean isPaginated() {
-        return paginated;
+    public InventoryContent getContent() {
+        return content;
     }
 
     public PersonalInventoryData getPersonalInventoryData(Player player) {
         PersonalInventoryData inventoryData = personalInventoriesDataMap.get(player.getUniqueId());
+
         if (inventoryData == null) {
             inventoryData = new PersonalInventoryData();
             personalInventoriesDataMap.put(player.getUniqueId(), inventoryData);
         }
+
         return inventoryData;
-    }
-
-    public int getOpenedPageIndex(Player player) {
-        int page = openedPageMap.get(player.getUniqueId());
-        if (openedPageMap.get(player.getUniqueId()) == null || page <= 0) {
-            page = -1;
-            openedPageMap.put(player.getUniqueId(), page);
-        }
-        return page;
-    }
-
-    public void setOpenedPageIndex(Player player, int page) {
-        Validate.isTrue(page <= pagination.pagesAmount(), "Page value must be smaller or equal amount of pages");
-        if(page <= 0) page = -1;
-
-        openedPageMap.put(player.getUniqueId(), page);
-    }
-
-    public InventoryContent getOpenedPageContent(Player player) {
-        if (getOpenedPageIndex(player) == -1) return null;
-        return getPageContent(getOpenedPageIndex(player));
-    }
-
-    public InventoryContent getPageContent(int page) {
-        return getPagination().getPage(page);
     }
 
     public Inventory getInventory(Player player) {
         PersonalInventoryData inventoryData = getPersonalInventoryData(player);
         Inventory inventory = inventoryData.getInventory();
+
         if (inventory == null) {
             inventory = Bukkit.createInventory(player, rows * 9, title);
             inventoryData.setInventory(inventory);
         }
+
         return inventory;
     }
 
-    public BukkitTask getUpdateTask(Player player, int page) {
-        Validate.isTrue(page > 1 && isPaginated() || page == 1, "Inventory isn't paginated");
-
+    public BukkitTask getUpdateTask(Player player) {
         PersonalInventoryData inventoryData = getPersonalInventoryData(player);
         BukkitTask updateTask = inventoryData.getUpdateTask();
         Inventory inventory = getInventory(player);
-        InventoryContent content = getPageContent(page);
 
         if (updateTask == null) {
             updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
@@ -138,40 +108,22 @@ public class CustomInventory {
         return updateTask;
     }
 
-    public void open(Player player, int page) {
-        Validate.isTrue(page > 1 && isPaginated() || page == 1, "Inventory isn't paginated");
-
-        Inventory inventory = getInventory(player);
-        InventoryContent content = getPageContent(page);
-
-        inventory.clear();
-
-        provider.init(player, content);
-        content.fillInventory(inventory);
-
-        getUpdateTask(player, page);
-        player.openInventory(inventory);
-        setOpenedPageIndex(player, page);
-    }
-
     public void open(Player player) {
-        open(player, 1);
-    }
-
-    public void update(Player player, int page) {
-        Validate.isTrue(page > 1 && isPaginated() || page == 1, "Inventory isn't paginated");
-
         Inventory inventory = getInventory(player);
-        InventoryContent content = getPageContent(page);
 
-        inventory.clear();
+        provider.init(player, this.content);
+        this.content.fillInventory(inventory);
 
-        provider.init(player, content);
-        content.fillInventory(inventory);
+        getUpdateTask(player);
+
+        player.openInventory(inventory);
     }
 
     public void update(Player player) {
-        update(player, 1);
+        Inventory inventory = getInventory(player);
+
+        provider.init(player, this.content);
+        this.content.fillInventory(inventory);
     }
 
     public static Builder builder() {
@@ -188,8 +140,7 @@ public class CustomInventory {
         private Plugin plugin;
         private PeriInventoryManager manager;
         private InventoryProvider provider;
-        private Pagination pagination;
-        private boolean paginated = false;
+        private InventoryContent content;
 
         private Builder() {
         }
@@ -230,13 +181,7 @@ public class CustomInventory {
         }
 
         public Builder content(InventoryContent content) {
-            this.pagination = new Pagination(content);
-            return this;
-        }
-
-        public Builder pagination(Pagination pagination) {
-            this.pagination = pagination;
-            this.paginated = true;
+            this.content = content;
             return this;
         }
 
@@ -253,15 +198,14 @@ public class CustomInventory {
                 throw new IllegalStateException("The provider of the CustomInventory.Builder is required");
             }
 
-            CustomInventory inventory = new CustomInventory(plugin, manager);
+            CustomInventory inventory = new CustomInventory(plugin, manager, rows);
 
             inventory.title = this.title;
-            inventory.rows = this.rows;
             inventory.closeable = this.closeable;
             inventory.updateDelay = this.updateDelay;
             inventory.provider = this.provider;
-            inventory.paginated = this.paginated;
-            if (pagination != null) inventory.pagination = this.pagination;
+
+            if (content != null) inventory.content = this.content;
 
             return inventory;
         }

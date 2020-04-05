@@ -7,6 +7,7 @@ public class PersonalInventoryData {
 
     private Inventory inventory;
     private BukkitTask updateTask;
+    private int openedPage;
 
     public Inventory getInventory() {
         return inventory;
@@ -28,5 +29,13 @@ public class PersonalInventoryData {
     public void cancelUpdateTask() {
         if (updateTask == null) return;
         updateTask.cancel();
+    }
+
+    public int getOpenedPage() {
+        return openedPage;
+    }
+
+    public void setOpenedPage(int openedPage) {
+        this.openedPage = openedPage;
     }
 }

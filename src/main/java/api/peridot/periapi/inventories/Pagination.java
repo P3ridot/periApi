@@ -1,53 +1,32 @@
 package api.peridot.periapi.inventories;
 
-import org.apache.commons.lang.Validate;
+import api.peridot.periapi.inventories.items.InventoryItem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 
 public class Pagination {
 
-    private final Map<Integer, InventoryContent> pagesMap = new HashMap<>();
+    private InventoryItem[] items = new InventoryItem[0];
+    private int itemsPerPage = 1;
 
-    public Pagination(InventoryContent firstPage) {
-        this.pagesMap.put(1, firstPage);
+    public InventoryItem[] getItems() {
+        return Arrays.copyOf(items, items.length);
     }
 
-    public Map<Integer, InventoryContent> getPagesMap() {
-        return new HashMap<>(pagesMap);
+    public int getItemsPerPage() {
+        return itemsPerPage;
     }
 
-    public List<InventoryContent> getPages() {
-        return new ArrayList<>(pagesMap.values());
+    public InventoryItem[] getItemsForPage(int page) {
+        return Arrays.copyOfRange(items, page * itemsPerPage, (page + 1) * itemsPerPage);
     }
 
-    public int pagesAmount() {
-        return getPages().size();
+    public int getPageCount() {
+        return (int) Math.ceil((float) this.items.length / itemsPerPage);
     }
 
-    public InventoryContent getPage(int page) {
-        Validate.isTrue(page >= 1, "Page value must be bigger or equal 1");
-        return pagesMap.get(page);
-    }
-
-    public void setPage(int page, InventoryContent content) {
-        Validate.isTrue(page >= 1, "Page value must be bigger or equal 1");
-        if (page > pagesAmount() + 1) {
-            pagesMap.put(pagesAmount() + 1, content);
-            return;
-        }
-        pagesMap.put(page, content);
-    }
-
-    public void setUnsafePage(int page, InventoryContent content) {
-        Validate.isTrue(page >= 1, "Page value must be bigger or equal 1");
-        pagesMap.put(page, content);
-    }
-
-    public void addPage(InventoryContent content) {
-        pagesMap.put(pagesAmount(), content);
+    public void setItems(InventoryItem... items) {
+        this.items = items;
     }
 
 }

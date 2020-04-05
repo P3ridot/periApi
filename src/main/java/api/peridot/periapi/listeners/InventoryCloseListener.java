@@ -2,6 +2,7 @@ package api.peridot.periapi.listeners;
 
 import api.peridot.periapi.PeriAPI;
 import api.peridot.periapi.inventories.CustomInventory;
+import api.peridot.periapi.inventories.PersonalInventoryData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,22 +23,18 @@ public class InventoryCloseListener implements Listener {
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player)) return;
-
         Player player = (Player) event.getPlayer();
 
         if (periApi.getInventoryManager().getInventories().isEmpty()) return;
-
         for (CustomInventory customInventory : periApi.getInventoryManager().getInventories()) {
             if (!customInventory.getInventory(player).equals(event.getInventory())) continue;
-
             if (customInventory.isCloseable()) {
-                customInventory.setOpenedPageIndex(player, -1);
-                customInventory.getPersonalInventoryData(player).setUpdateTask(null);
+                PersonalInventoryData data = customInventory.getPersonalInventoryData(player);
+                data.setOpenedPage(-1);
+                data.setUpdateTask(null);
                 return;
             }
-
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> customInventory.open(player), 2);
-
             return;
         }
     }

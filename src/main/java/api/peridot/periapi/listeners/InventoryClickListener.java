@@ -26,20 +26,17 @@ public class InventoryClickListener implements Listener {
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) return;
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
-
         Player player = (Player) event.getWhoClicked();
         ItemStack clickedItem = event.getCurrentItem();
 
         if (periApi.getInventoryManager().getInventories().isEmpty()) return;
-
         for (CustomInventory customInventory : periApi.getInventoryManager().getInventories()) {
             if (!customInventory.getInventory(player).equals(event.getClickedInventory())) continue;
 
-            InventoryContent content = customInventory.getOpenedPageContent(player);
+            InventoryContent content = customInventory.getContent();
 
             if (content == null) return;
             if (content.isEmpty()) return;
-
             for (InventoryItem inventoryItem : content.getItems()) {
                 ItemStack item = inventoryItem.getItem();
 
@@ -50,7 +47,6 @@ public class InventoryClickListener implements Listener {
 
                 if (inventoryItem.isCancel()) event.setCancelled(true);
                 if (inventoryItem.isUpdate()) customInventory.update(player);
-
                 return;
             }
         }

@@ -9,7 +9,20 @@ import java.util.*;
 
 public class InventoryContent {
 
+    private final int rows;
     private final Map<Integer, InventoryItem> inventoryItems = new HashMap<>();
+
+    public InventoryContent(int rows) {
+        this.rows = rows;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getInventorySize() {
+        return rows * 9;
+    }
 
     public Collection<InventoryItem> getItems() {
         return inventoryItems.values();
@@ -33,7 +46,7 @@ public class InventoryContent {
 
     public void setItem(int slot, InventoryItem inventoryItem) {
         Validate.isTrue(slot >= 0, "Slot must be bigger or equal 0");
-        Validate.isTrue(slot <= 53, "Slot must be smaller or equal 53");
+        Validate.isTrue(slot <= getInventorySize() - 1, "Slot must be smaller or equal " + (getInventorySize() - 1));
         inventoryItems.put(slot, inventoryItem);
     }
 
@@ -44,7 +57,7 @@ public class InventoryContent {
     }
 
     public void fill(InventoryItem inventoryItem) {
-        for (int i = 0; i < 53; i++) {
+        for (int i = 0; i < getInventorySize() - 1; i++) {
             setItem(i, inventoryItem);
         }
     }
@@ -57,7 +70,7 @@ public class InventoryContent {
 
     public void fillRow(int row, InventoryItem inventoryItem) {
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= 6, "Row value must be smaller or equal 6");
+        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
 
         for (int i = 0; i < 9; i++) {
             setItem((row - 1) * 9 + i, inventoryItem);
@@ -66,7 +79,7 @@ public class InventoryContent {
 
     public void fillRowEmpty(int row, InventoryItem inventoryItem) {
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= 6, "Row value must be smaller or equal 6");
+        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
 
         for (int i = 0; i < 9; i++) {
             int slot = (row - 1) * 9 + i;
@@ -79,7 +92,7 @@ public class InventoryContent {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
         Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < rows; i++) {
             setItem((column + (i * 9)) - 1, inventoryItem);
         }
     }
@@ -88,7 +101,7 @@ public class InventoryContent {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
         Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < rows; i++) {
             int slot = (column + (i * 9)) - 1;
             if (!isEmptySlot(slot)) continue;
             setItem(slot, inventoryItem);
@@ -99,7 +112,7 @@ public class InventoryContent {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
         Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= 6, "Row value must be smaller or equal 6");
+        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
 
         int slot = 0;
 
@@ -123,7 +136,7 @@ public class InventoryContent {
     public List<Integer> emptySlots() {
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < 53; i++) {
+        for (int i = 0; i < getInventorySize() - 1; i++) {
             if (isEmptySlot(i)) list.add(i);
         }
 
@@ -133,7 +146,7 @@ public class InventoryContent {
     public int firstEmptySlot() {
         int slot = -1;
 
-        for (int i = 0; i < 53; i++) {
+        for (int i = 0; i < getInventorySize() - 1; i++) {
             if (isEmptySlot(i)) return i;
         }
 
