@@ -1,9 +1,11 @@
 package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.items.InventoryItem;
+import api.peridot.periapi.items.ItemBuilder;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 

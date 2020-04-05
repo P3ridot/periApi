@@ -1,6 +1,7 @@
 package api.peridot.periapi.inventories.items;
 
 import api.peridot.periapi.items.ItemBuilder;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,6 +25,7 @@ public class InventoryItem {
     }
 
     public ItemStack getItem() {
+        if (item == null) return new ItemStack(Material.AIR);
         return item;
     }
 
