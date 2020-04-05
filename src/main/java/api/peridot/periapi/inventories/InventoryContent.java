@@ -1,7 +1,6 @@
 package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.items.InventoryItem;
-import api.peridot.periapi.items.ItemBuilder;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -160,7 +159,7 @@ public class InventoryContent {
 
         inventoryItems.forEach((slot, item) -> {
             if (slot + 1 <= inventory.getSize()) {
-                if(item != null) {
+                if (item != null) {
                     inventory.setItem(slot, item.getItem());
                 } else {
                     inventory.setItem(slot, new ItemStack(Material.AIR));

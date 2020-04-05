@@ -13,6 +13,10 @@ public class Pagination {
         return Arrays.copyOf(items, items.length);
     }
 
+    public void setItems(InventoryItem... items) {
+        this.items = items;
+    }
+
     public int getItemsPerPage() {
         return itemsPerPage;
     }
@@ -27,10 +31,6 @@ public class Pagination {
 
     public int getPageCount() {
         return (int) Math.ceil((float) this.items.length / itemsPerPage);
-    }
-
-    public void setItems(InventoryItem... items) {
-        this.items = items;
     }
 
 }
