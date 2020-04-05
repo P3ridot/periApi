@@ -160,7 +160,11 @@ public class InventoryContent {
 
         inventoryItems.forEach((slot, item) -> {
             if (slot + 1 <= inventory.getSize()) {
-                inventory.setItem(slot, item.getItem());
+                if(item != null) {
+                    inventory.setItem(slot, item.getItem());
+                } else {
+                    inventory.setItem(slot, new ItemStack(Material.AIR));
+                }
             }
         });
     }
