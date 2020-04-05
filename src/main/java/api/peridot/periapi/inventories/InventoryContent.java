@@ -172,6 +172,11 @@ public class InventoryContent {
         inventoryItems.clear();
     }
 
+    public SlotIterator iterator(List<InventoryItem> inventoryItems) {
+        InventoryItem[] itemsArray = new InventoryItem[inventoryItems.size()];
+        return iterator(inventoryItems.toArray(itemsArray));
+    }
+
     public SlotIterator iterator(InventoryItem... inventoryItems) {
         return new SlotIterator(inventoryItems);
     }
