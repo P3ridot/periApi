@@ -171,4 +171,82 @@ public class InventoryContent {
     public void clear() {
         inventoryItems.clear();
     }
+
+    public SlotIterator iterator(InventoryItem... inventoryItems) {
+        return new SlotIterator(inventoryItems);
+    }
+
+    public class SlotIterator {
+        private final InventoryItem[] items;
+
+        private int slotFrom = 0;
+        private int slotTo = 0;
+        private boolean onlyEmpty = true;
+        private boolean loop = false;
+
+        private SlotIterator(InventoryItem[] items) {
+            this.items = items;
+        }
+
+        public SlotIterator slotFrom(int slot) {
+            Validate.isTrue(slot >= 0, "Start slot must be bigger or equal 0");
+
+            this.slotFrom = slot;
+            return this;
+        }
+
+        public SlotIterator slotTo(int slot) {
+            Validate.isTrue(slot <= getInventorySize() - 1, "End slot must be smaller or equal " + (getInventorySize() - 1));
+
+            this.slotTo = slot;
+            return this;
+        }
+
+        public SlotIterator slotFrom(int row, int column) {
+            Validate.isTrue(row >= 1, "Start row value must be bigger or equal 1");
+            Validate.isTrue(row <= rows, "Start row value must be smaller or equal " + rows);
+            Validate.isTrue(column >= 1, "Start column value must be bigger or equal 1");
+            Validate.isTrue(column <= 9, "Start column value must be smaller or equal 9");
+
+            this.slotFrom = slotFromRowAndColumn(row, column);
+            return this;
+        }
+
+        public SlotIterator slotTo(int row, int column) {
+            Validate.isTrue(row >= 1, "End row value must be bigger or equal 1");
+            Validate.isTrue(row <= rows, "End row value must be smaller or equal " + rows);
+            Validate.isTrue(column >= 1, "End column value must be bigger or equal 1");
+            Validate.isTrue(column <= 9, "End column value must be smaller or equal 9");
+
+            this.slotTo = slotFromRowAndColumn(row, column);
+            return this;
+        }
+
+        public SlotIterator onlyEmpty(boolean onlyEmpty) {
+            this.onlyEmpty = onlyEmpty;
+            return this;
+        }
+
+        public SlotIterator loop(boolean loop) {
+            this.loop = loop;
+            return this;
+        }
+
+        public void iterate() {
+            int i = 0;
+
+            int from = Math.min(slotFrom, slotTo);
+            int to = Math.max(slotFrom, slotTo);
+
+            for (int slot = from; slot < to + 1; slot++) {
+                if (!loop && i > items.length) return;
+                if (loop && i > items.length) {
+                    i = (items.length % i) - 1;
+                }
+                if (!onlyEmpty && isEmptySlot(slot)) continue;
+                setItem(slot, items[i]);
+                i++;
+            }
+        }
+    }
 }
