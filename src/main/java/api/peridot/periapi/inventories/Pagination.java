@@ -17,6 +17,10 @@ public class Pagination {
         return itemsPerPage;
     }
 
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
+    }
+
     public InventoryItem[] getItemsForPage(int page) {
         return Arrays.copyOfRange(items, page * itemsPerPage, (page + 1) * itemsPerPage);
     }
