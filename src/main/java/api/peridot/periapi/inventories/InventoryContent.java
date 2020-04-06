@@ -246,7 +246,7 @@ public class InventoryContent {
             for (int slot = from; slot < to + 1; slot++) {
                 if (!loop && i + 1 > items.length) return;
                 if (loop && i + 1 > items.length) {
-                    i = (items.length % i) - 1;
+                    i = (i % items.length) - 1;
                     if (i < 0) i = 0;
                 }
                 if (onlyEmpty && !isEmptySlot(slot)) continue;
