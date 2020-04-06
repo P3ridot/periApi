@@ -249,7 +249,7 @@ public class InventoryContent {
                     i = (items.length % i) - 1;
                     if (i < 0) i = 0;
                 }
-                if (!onlyEmpty && isEmptySlot(slot)) continue;
+                if (onlyEmpty && !isEmptySlot(slot)) continue;
                 setItem(slot, items[i]);
                 i++;
             }
