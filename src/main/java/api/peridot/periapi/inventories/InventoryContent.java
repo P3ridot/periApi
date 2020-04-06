@@ -244,8 +244,8 @@ public class InventoryContent {
             int to = Math.max(slotFrom, slotTo);
 
             for (int slot = from; slot < to + 1; slot++) {
-                if (!loop && i > items.length) return;
-                if (loop && i > items.length) {
+                if (!loop && i + 1 > items.length) return;
+                if (loop && i + 1 > items.length) {
                     i = (items.length % i) - 1;
                 }
                 if (!onlyEmpty && isEmptySlot(slot)) continue;
