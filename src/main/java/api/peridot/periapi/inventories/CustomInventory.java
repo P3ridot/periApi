@@ -1,6 +1,7 @@
 package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.providers.InventoryProvider;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -106,6 +107,12 @@ public class CustomInventory {
         }
 
         return updateTask;
+    }
+
+    public void open(Player player, int page) {
+        Validate.isTrue(page >= 0, "Page value must be bigger or equal 0");
+        getPersonalInventoryData(player).setOpenedPage(page);
+        open(player);
     }
 
     public void open(Player player) {
