@@ -7,11 +7,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InventoryContent {
 
     private final int rows;
-    private final Map<Integer, InventoryItem> inventoryItems = new HashMap<>();
+    private final Map<Integer, InventoryItem> inventoryItems = new ConcurrentHashMap<>();
 
     public InventoryContent(int rows) {
         this.rows = rows;
@@ -46,6 +47,7 @@ public class InventoryContent {
     }
 
     public void setItem(int slot, InventoryItem inventoryItem) {
+        Validate.notNull(inventoryItem, "Item cannot be null");
         Validate.isTrue(slot >= 0, "Slot must be bigger or equal 0");
         Validate.isTrue(slot <= getInventorySize() - 1, "Slot must be smaller or equal " + (getInventorySize() - 1));
         inventoryItems.put(slot, inventoryItem);
@@ -246,7 +248,6 @@ public class InventoryContent {
                 if (!loop && i + 1 > items.size()) return;
                 if (loop && i + 1 > items.size()) {
                     i = (i % items.size()) - 1;
-                    if (i < 0) i = 0;
                 }
                 if (onlyEmpty && !isEmptySlot(slot)) continue;
                 setItem(slot, items.get(i));

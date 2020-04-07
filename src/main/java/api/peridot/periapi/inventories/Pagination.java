@@ -2,19 +2,25 @@ package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.items.InventoryItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Pagination {
 
-    private InventoryItem[] items = new InventoryItem[0];
+    private List<InventoryItem> items = new ArrayList<>();
     private int itemsPerPage = 1;
 
-    public InventoryItem[] getItems() {
-        return Arrays.copyOf(items, items.length);
+    public List<InventoryItem> getItems() {
+        return new ArrayList<>(items);
+    }
+
+    public void setItems(List<InventoryItem> items) {
+        this.items = items;
     }
 
     public void setItems(InventoryItem... items) {
-        this.items = items;
+        setItems(Arrays.asList(items));
     }
 
     public int getItemsPerPage() {
@@ -25,12 +31,15 @@ public class Pagination {
         this.itemsPerPage = itemsPerPage;
     }
 
-    public InventoryItem[] getItemsForPage(int page) {
-        return Arrays.copyOfRange(items, page * itemsPerPage, (page + 1) * itemsPerPage);
+    public List<InventoryItem> getItemsForPage(int page) {
+        int indexTo = (page + 1) * itemsPerPage;
+        if (indexTo > items.size()) indexTo = items.size();
+
+        return items.subList(page * itemsPerPage, indexTo);
     }
 
     public int getPageCount() {
-        return (int) Math.ceil((float) this.items.length / itemsPerPage);
+        return (int) Math.ceil((float) this.items.size() / itemsPerPage);
     }
 
 }
