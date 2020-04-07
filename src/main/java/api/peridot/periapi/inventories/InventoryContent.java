@@ -248,6 +248,7 @@ public class InventoryContent {
                 if (!loop && i + 1 > items.size()) return;
                 if (loop && i + 1 > items.size()) {
                     i = (i % items.size()) - 1;
+                    if(i < 0) i = 0;
                 }
                 if (onlyEmpty && !isEmptySlot(slot)) continue;
                 setItem(slot, items.get(i));
