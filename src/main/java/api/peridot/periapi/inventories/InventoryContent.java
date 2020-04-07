@@ -173,23 +173,22 @@ public class InventoryContent {
     }
 
     public SlotIterator iterator(List<InventoryItem> inventoryItems) {
-        InventoryItem[] itemsArray = new InventoryItem[inventoryItems.size()];
-        return iterator(inventoryItems.toArray(itemsArray));
-    }
-
-    public SlotIterator iterator(InventoryItem... inventoryItems) {
         return new SlotIterator(inventoryItems);
     }
 
+    public SlotIterator iterator(InventoryItem... inventoryItems) {
+        return iterator(Arrays.asList(inventoryItems));
+    }
+
     public class SlotIterator {
-        private final InventoryItem[] items;
+        private final List<InventoryItem> items;
 
         private int slotFrom = 0;
         private int slotTo = 0;
         private boolean onlyEmpty = true;
         private boolean loop = false;
 
-        private SlotIterator(InventoryItem[] items) {
+        private SlotIterator(List<InventoryItem> items) {
             this.items = items;
         }
 
@@ -244,13 +243,13 @@ public class InventoryContent {
             int to = Math.max(slotFrom, slotTo);
 
             for (int slot = from; slot < to + 1; slot++) {
-                if (!loop && i + 1 > items.length) return;
-                if (loop && i + 1 > items.length) {
-                    i = (i % items.length) - 1;
+                if (!loop && i + 1 > items.size()) return;
+                if (loop && i + 1 > items.size()) {
+                    i = (i % items.size()) - 1;
                     if (i < 0) i = 0;
                 }
                 if (onlyEmpty && !isEmptySlot(slot)) continue;
-                setItem(slot, items[i]);
+                setItem(slot, items.get(i));
                 i++;
             }
         }
