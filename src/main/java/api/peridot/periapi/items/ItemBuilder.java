@@ -45,7 +45,11 @@ public class ItemBuilder {
         this.itemMeta = itemMeta;
     }
 
+    @Override
     public ItemBuilder clone() {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            new ItemBuilder(Material.AIR);
+        }
         return new ItemBuilder(itemStack.clone(), itemMeta.clone());
     }
 
