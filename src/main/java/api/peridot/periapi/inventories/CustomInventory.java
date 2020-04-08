@@ -126,6 +126,12 @@ public class CustomInventory {
         player.openInventory(inventory);
     }
 
+    public void update(Player player, int page) {
+        Validate.isTrue(page >= 0, "Page value must be bigger or equal 0");
+        getPersonalInventoryData(player).setOpenedPage(page);
+        update(player);
+    }
+
     public void update(Player player) {
         Inventory inventory = getInventory(player);
 

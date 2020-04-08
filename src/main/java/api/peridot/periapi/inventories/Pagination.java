@@ -42,4 +42,12 @@ public class Pagination {
         return (int) Math.ceil((float) this.items.size() / itemsPerPage);
     }
 
+    public boolean isFirst(int page) {
+        return page <= 0;
+    }
+
+    public boolean isLast(int page) {
+        return page >= getPageCount();
+    }
+
 }

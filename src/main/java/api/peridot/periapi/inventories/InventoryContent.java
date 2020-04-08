@@ -187,7 +187,7 @@ public class InventoryContent {
 
         private int slotFrom = 0;
         private int slotTo = 0;
-        private boolean onlyEmpty = true;
+        private boolean onlyEmpty = false;
         private boolean loop = false;
 
         private SlotIterator(List<InventoryItem> items) {
