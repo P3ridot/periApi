@@ -47,7 +47,7 @@ public class Pagination {
     }
 
     public boolean isLast(int page) {
-        return page >= getPageCount();
+        return page >= getPageCount() - 1;
     }
 
 }
