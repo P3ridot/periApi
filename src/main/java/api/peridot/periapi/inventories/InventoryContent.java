@@ -60,7 +60,7 @@ public class InventoryContent {
     }
 
     public void fill(InventoryItem inventoryItem) {
-        for (int i = 0; i < getInventorySize() - 1; i++) {
+        for (int i = 0; i < getInventorySize(); i++) {
             setItem(i, inventoryItem);
         }
     }
