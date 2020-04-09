@@ -1,5 +1,7 @@
 package api.peridot.periapi.utils;
 
+import api.peridot.periapi.packets.Reflections;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 public enum Sounds {
@@ -211,9 +213,14 @@ public enum Sounds {
         if (resolvedSound != null) return resolvedSound;
 
         try {
-            return resolvedSound = Sound.valueOf(post19sound);
-        } catch (IllegalArgumentException e) {
-            return resolvedSound = Sound.valueOf(pre19sound);
+            if (Reflections.server_version_number >= 9) {
+                return resolvedSound = Sound.valueOf(post19sound);
+            } else {
+                return resolvedSound = Sound.valueOf(pre19sound);
+            }
+        } catch (Exception ignored) {
+            Bukkit.getLogger().warning("Problem with getting bukkit sound");
+            return null;
         }
     }
 }
