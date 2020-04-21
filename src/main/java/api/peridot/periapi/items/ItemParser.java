@@ -11,12 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemsParser {
+public class ItemParser {
 
-    private ItemsParser() {
+    private ItemParser() {
     }
 
-    public static ItemBuilder getItemBuilder(ConfigurationSection section) {
+    public static ItemBuilder parseItemBuilder(ConfigurationSection section) {
         if (section == null) return null;
 
         ItemBuilder item = new ItemBuilder(Material.matchMaterial(section.getString("material")), Math.max(section.getInt("amount"), 1));
@@ -37,8 +37,8 @@ public class ItemsParser {
         return item;
     }
 
-    public static ItemStack getItem(ConfigurationSection section) {
-        return getItemBuilder(section).build();
+    public static ItemStack parseItemStack(ConfigurationSection section) {
+        return parseItemBuilder(section).build();
     }
 
     private static Map<Enchantment, Integer> parseEnchantments(List<String> enchantments) {
