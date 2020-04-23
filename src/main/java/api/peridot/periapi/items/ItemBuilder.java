@@ -189,27 +189,31 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setSkullOwner(String skullOwner) {
-        try {
-            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
-            skullMeta.setOwner(skullOwner);
-            this.itemMeta = skullMeta;
-        } catch (Exception ignored) {
+        if (skullOwner != null && !skullOwner.isEmpty()) {
+            try {
+                SkullMeta skullMeta = (SkullMeta) this.itemMeta;
+                skullMeta.setOwner(skullOwner);
+                this.itemMeta = skullMeta;
+            } catch (Exception ignored) {
+            }
         }
         return this;
     }
 
     public ItemBuilder setCustomSkullOwner(String url) {
-        try {
-            SkullMeta skullMeta = (SkullMeta) this.itemMeta;
+        if (url != null && !url.isEmpty()) {
+            try {
+                SkullMeta skullMeta = (SkullMeta) this.itemMeta;
 
-            GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-            profile.getProperties().put("textures", new Property("textures", url));
-            Field profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, profile);
+                GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+                profile.getProperties().put("textures", new Property("textures", url));
+                Field profileField = skullMeta.getClass().getDeclaredField("profile");
+                profileField.setAccessible(true);
+                profileField.set(skullMeta, profile);
 
-            this.itemMeta = skullMeta;
-        } catch (Exception ignored) {
+                this.itemMeta = skullMeta;
+            } catch (Exception ignored) {
+            }
         }
         return this;
     }
