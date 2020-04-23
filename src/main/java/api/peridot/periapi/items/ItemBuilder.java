@@ -200,23 +200,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setSkullOwnerByGameProfile(String skullOwner) {
-        if (skullOwner != null && !skullOwner.isEmpty()) {
-            try {
-                SkullMeta skullMeta = (SkullMeta) this.itemMeta;
-
-                GameProfile profile = new GameProfile(UUID.randomUUID(), skullOwner);
-                Field profileField = skullMeta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(skullMeta, profile);
-
-                this.itemMeta = skullMeta;
-            } catch (Exception ignored) {
-            }
-        }
-        return this;
-    }
-
     public ItemBuilder setCustomSkullOwner(String url) {
         if (url != null && !url.isEmpty()) {
             try {
