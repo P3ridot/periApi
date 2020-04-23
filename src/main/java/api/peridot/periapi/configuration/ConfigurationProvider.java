@@ -43,7 +43,7 @@ public class ConfigurationProvider {
         return value instanceof String ? value.toString() : null;
     }
 
-    public String getStringColored(String path) {
+    public String getColoredString(String path) {
         String value = ColorUtil.color(getString(path));
         if (value != null) {
             valuesMap.put(path, value);
