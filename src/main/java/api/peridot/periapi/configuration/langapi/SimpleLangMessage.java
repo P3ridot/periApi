@@ -1,4 +1,4 @@
-package api.peridot.periapi.langapi;
+package api.peridot.periapi.configuration.langapi;
 
 import api.peridot.periapi.utils.ColorUtil;
 import org.apache.commons.lang.StringUtils;

@@ -1,6 +1,6 @@
 package api.peridot.periapi.items;
 
-import api.peridot.periapi.langapi.Replacement;
+import api.peridot.periapi.configuration.langapi.Replacement;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.apache.commons.lang.StringUtils;

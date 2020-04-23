@@ -1,4 +1,4 @@
-package api.peridot.periapi.langapi;
+package api.peridot.periapi.configuration.langapi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

@@ -1,4 +1,4 @@
-package api.peridot.periapi.langapi;
+package api.peridot.periapi.configuration.langapi;
 
 import api.peridot.periapi.packets.NotificationPackets;
 import api.peridot.periapi.packets.PacketSender;
