@@ -1,6 +1,6 @@
 package api.peridot.periapi.utils;
 
-import api.peridot.periapi.packets.Reflections;
+import api.peridot.periapi.packets.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
@@ -213,7 +213,7 @@ public enum Sounds {
         if (resolvedSound != null) return resolvedSound;
 
         try {
-            if (Reflections.server_version_number >= 9) {
+            if (Reflection.serverVersionNumber >= 9) {
                 return resolvedSound = Sound.valueOf(post19sound);
             } else {
                 return resolvedSound = Sound.valueOf(pre19sound);

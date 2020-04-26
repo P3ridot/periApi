@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PacketSender {
 
-    private static Method sendPacket;
+    private static Reflection.MethodInvoker sendPacket;
 
     public static void sendPacket(Object... packets) {
         sendPacket(Arrays.asList(packets));
@@ -67,7 +67,7 @@ public class PacketSender {
 
     static {
         try {
-            sendPacket = Reflections.getNMSClass("PlayerConnection").getMethod("sendPacket", Reflections.getNMSClass("Packet"));
+            sendPacket = Reflection.getMethod("PlayerConnection", "sendPacket", Reflection.getMinecraftClass("Packet"));
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not setup PacketSender");
             ex.printStackTrace();
