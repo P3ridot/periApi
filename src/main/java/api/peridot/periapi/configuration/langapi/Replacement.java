@@ -5,9 +5,9 @@ public class Replacement {
     private String from;
     private String to;
 
-    public Replacement(String from, String to) {
+    public Replacement(String from, Object to) {
         this.from = from;
-        this.to = to;
+        this.to = to.toString();
     }
 
     public String getFrom() {
