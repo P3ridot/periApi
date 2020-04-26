@@ -30,4 +30,15 @@ public class Reflections {
         return bukkitClass;
     }
 
+    public static Class<?> getClass(String name) {
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(name);
+        } catch (Exception ex) {
+            Bukkit.getLogger().severe("Could not get class with specify name");
+            ex.printStackTrace();
+        }
+        return clazz;
+    }
+
 }
