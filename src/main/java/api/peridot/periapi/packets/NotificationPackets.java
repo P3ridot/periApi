@@ -1,5 +1,7 @@
 package api.peridot.periapi.packets;
 
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +40,11 @@ public class NotificationPackets {
             TIMES_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TIMES");
 
             PACKET_PLAY_OUT_TITLE = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutTitle"), TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
-            PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
+            if (CHAT_MESSAGE_TYPE_CLASS == null) {
+                PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, int.class);
+            } else {
+                PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
