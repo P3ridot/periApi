@@ -1,5 +1,7 @@
 package api.peridot.periapi.packets;
 
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,7 @@ public class NotificationPackets {
                 CHAT_MESSAGE_TYPE = CHAT_MESSAGE_TYPE_CLASS.getEnumConstants()[2];
             }
 
-            TITLE_ACTION_CLASS = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMinecraftClass("EnumTitleAction") : Reflection.getMinecraftClass("PacketPlayOutTitle$EnumTitleAction");
+            TITLE_ACTION_CLASS = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMinecraftClass("EnumTitleAction") : Reflection.getMinecraftClass("EnumTitleAction").asSubclass(Reflection.getMinecraftClass("PacketPlayOutTitle"));
             GET_TITLE_ACTION_ENUM = Reflection.getMethod(TITLE_ACTION_CLASS, "valueOf", String.class);
             TITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TITLE");
             SUBTITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "SUBTITLE");
