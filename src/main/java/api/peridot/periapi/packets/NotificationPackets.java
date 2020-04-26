@@ -1,14 +1,12 @@
 package api.peridot.periapi.packets;
 
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class NotificationPackets {
 
-    private static final Class<?> CHAT_BASE_COMPONENT_CLASS = Reflection.getMinecraftClass("IChatBaseComponent");
+    private static Class<?> CHAT_BASE_COMPONENT_CLASS;
     private static Class<?> TITLE_ACTION_CLASS;
     private static Class<?> CHAT_MESSAGE_TYPE_CLASS;
     private static Object CHAT_MESSAGE_TYPE;
@@ -19,11 +17,13 @@ public class NotificationPackets {
     private static Enum<?> SUBTITLE_ENUM;
     private static Enum<?> TIMES_ENUM;
 
-    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_TITLE = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutTitle"), TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
-    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
+    private static Reflection.ConstructorInvoker PACKET_PLAY_OUT_TITLE;
+    private static Reflection.ConstructorInvoker PACKET_PLAY_OUT_CHAT;
 
     static {
         try {
+            CHAT_BASE_COMPONENT_CLASS = Reflection.getMinecraftClass("IChatBaseComponent");
+
             if (Reflection.usePre12Methods) {
                 CHAT_MESSAGE_TYPE_CLASS = null;
             } else {
@@ -31,11 +31,14 @@ public class NotificationPackets {
                 CHAT_MESSAGE_TYPE = CHAT_MESSAGE_TYPE_CLASS.getEnumConstants()[2];
             }
 
-            TITLE_ACTION_CLASS = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMinecraftClass("EnumTitleAction") : Reflection.getMinecraftClass("EnumTitleAction").asSubclass(Reflection.getMinecraftClass("PacketPlayOutTitle"));
+            TITLE_ACTION_CLASS = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMinecraftClass("EnumTitleAction") : Reflection.getMinecraftClass("PacketPlayOutTitle$EnumTitleAction");
             GET_TITLE_ACTION_ENUM = Reflection.getMethod(TITLE_ACTION_CLASS, "valueOf", String.class);
             TITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TITLE");
             SUBTITLE_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "SUBTITLE");
             TIMES_ENUM = (Enum) GET_TITLE_ACTION_ENUM.invoke(TITLE_ACTION_CLASS, "TIMES");
+
+            PACKET_PLAY_OUT_TITLE = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutTitle"), TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
+            PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
