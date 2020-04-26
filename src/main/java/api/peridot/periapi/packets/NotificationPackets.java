@@ -17,8 +17,8 @@ public class NotificationPackets {
     private static Enum<?> SUBTITLE_ENUM;
     private static Enum<?> TIMES_ENUM;
 
-    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_TITLE = Reflection.getConstructor("PacketPlayOutTitle", TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
-    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_CHAT = Reflection.getConstructor("PacketPlayOutChat", CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
+    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_TITLE = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutTitle"), TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
+    private static final Reflection.ConstructorInvoker PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
 
     static {
         try {
