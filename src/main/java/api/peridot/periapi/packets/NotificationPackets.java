@@ -41,7 +41,7 @@ public class NotificationPackets {
 
             PACKET_PLAY_OUT_TITLE = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutTitle"), TITLE_ACTION_CLASS, CHAT_BASE_COMPONENT_CLASS, int.class, int.class, int.class);
             if (CHAT_MESSAGE_TYPE_CLASS == null) {
-                PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, int.class);
+                PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, byte.class);
             } else {
                 PACKET_PLAY_OUT_CHAT = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutChat"), CHAT_BASE_COMPONENT_CLASS, CHAT_MESSAGE_TYPE_CLASS);
             }
