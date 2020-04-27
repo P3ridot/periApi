@@ -8,7 +8,7 @@ public class CommonPackets {
 
     static {
         try {
-            CREATE_BASE_COMPONENT = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMethod("ChatSerializer", "a", String.class) : Reflection.getMethod("IChatBaseComponent$ChatSerializer", "a", String.class);
+            CREATE_BASE_COMPONENT = Reflection.serverVersion.equals("v1_8_R1") ? Reflection.getMethod(Reflection.getMinecraftClass("ChatSerializer"), "a", String.class) : Reflection.getMethod(Reflection.getMinecraftClass("IChatBaseComponent$ChatSerializer"), "a", String.class);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
