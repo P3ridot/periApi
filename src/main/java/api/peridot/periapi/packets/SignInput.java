@@ -60,6 +60,9 @@ public class SignInput {
 
                     if (!close) {
                         if (response.type == Response.Type.TEXT) {
+                            for (String s : response.text) {
+                                System.out.println("s = " + s);
+                            }
                             Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 4);
                         } else {
                             Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 4);
