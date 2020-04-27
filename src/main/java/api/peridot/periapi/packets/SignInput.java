@@ -60,12 +60,9 @@ public class SignInput {
 
                     if (!close) {
                         if (response.type == Response.Type.TEXT) {
-                            for (String s : response.text) {
-                                System.out.println("s = " + s);
-                            }
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 4);
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender, response.text), 2);
                         } else {
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 4);
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender), 2);
                         }
                     } else {
                         sender.sendBlockChange(signLocation, block.getType(), block.getData());
@@ -184,6 +181,7 @@ public class SignInput {
         }
 
         public Response text(List<String> text) {
+            this.type = Type.TEXT;
             this.text = new String[]{
                     text.get(0),
                     text.get(1),
