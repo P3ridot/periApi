@@ -18,12 +18,12 @@ public class SignInput {
     private final Class<?> blockPositionClass = Reflection.getMinecraftClass("BlockPosition");
     private final Reflection.ConstructorInvoker packetPlayOutOpenSignEditor = Reflection.getConstructor(Reflection.getMinecraftClass("PacketPlayOutOpenSignEditor"), blockPositionClass);
     private final Reflection.ConstructorInvoker blockPosition = Reflection.getConstructor(blockPositionClass, int.class, int.class, int.class);
-    private final Reflection.FieldAccessor<?> SIGN_POSITION = Reflection.getField(packetPlayInUpdateSign, "a", blockPositionClass);
-    private final Reflection.FieldAccessor<?> SIGN_MESSAGE = Reflection.getField(packetPlayInUpdateSign, "b", chatBaseComponentArrayClass);
     private final Reflection.MethodInvoker getText = Reflection.getMethod(chatBaseComponentClass, "getText");
     private final Reflection.MethodInvoker getPositionX = Reflection.getMethod(blockPositionClass, "getX");
     private final Reflection.MethodInvoker getPositionY = Reflection.getMethod(blockPositionClass, "getY");
     private final Reflection.MethodInvoker getPositionZ = Reflection.getMethod(blockPositionClass, "getZ");
+    private final Reflection.FieldAccessor<?> SIGN_POSITION = Reflection.getField(packetPlayInUpdateSign, "a", blockPositionClass);
+    private final Reflection.FieldAccessor<?> SIGN_MESSAGE = Reflection.getField(packetPlayInUpdateSign, "b", chatBaseComponentArrayClass);
 
     private final Plugin plugin;
     private final TinyProtocol protocol;
@@ -73,7 +73,7 @@ public class SignInput {
         Location location = player.getLocation();
         int y = 255;
         if (location.getBlockX() >= 128) {
-            y = 0;
+            y = 1;
         }
         location.setY(y);
 
