@@ -10,7 +10,7 @@ public class ReplacementUtil {
     private ReplacementUtil() {
     }
 
-    public static List<String> replaceInList(List<String> list, Replacement... replacements) {
+    public static List<String> replace(List<String> list, Replacement... replacements) {
         List<String> resultList = new ArrayList<>(list);
         for (int i = 0; i < resultList.size(); i++) {
             resultList.set(i, replace(resultList.get(i), replacements));
