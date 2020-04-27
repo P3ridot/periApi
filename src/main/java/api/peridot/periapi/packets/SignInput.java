@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 public class SignInput {
@@ -103,6 +104,16 @@ public class SignInput {
 
         public Builder text(String... text) {
             this.text = text;
+            return this;
+        }
+
+        public Builder text(List<String> text) {
+            this.text = new String[] {
+              text.get(0),
+              text.get(1),
+              text.get(2),
+              text.get(3)
+            };
             return this;
         }
 
