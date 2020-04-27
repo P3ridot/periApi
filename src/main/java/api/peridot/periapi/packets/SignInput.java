@@ -34,9 +34,11 @@ public class SignInput {
 
     private SignInput(Plugin plugin) {
         this.plugin = plugin;
+
+        getProtocol();
     }
 
-    public TinyProtocol getProtocol() {
+    private TinyProtocol getProtocol() {
         if (protocol != null && !protocol.closed) {
             protocol = new TinyProtocol(plugin) {
                 @Override
@@ -63,9 +65,9 @@ public class SignInput {
 
                         if (!close) {
                             if (response.type == Response.Type.TEXT) {
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 2);
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 4);
                             } else {
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 2);
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 4);
                             }
                         } else {
                             sender.sendBlockChange(signLocation, block.getType(), block.getData());
