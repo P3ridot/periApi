@@ -1,6 +1,7 @@
 package api.peridot.periapi.packets;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -11,6 +12,7 @@ import java.util.List;
 public class PacketSender {
 
     private static Reflection.MethodInvoker sendPacket;
+    private static Class<?> PLAYER_CONNECTION_CLASS;
 
     public static void sendPacket(Object... packets) {
         sendPacket(Arrays.asList(packets));
@@ -54,9 +56,9 @@ public class PacketSender {
     private static Object getConnection(Player player) {
         Object connection = null;
         try {
-            Method getHandle = player.getClass().getMethod("getHandle");
+            Reflection.MethodInvoker getHandle = Reflection.getMethod(player.getClass(), "getHandle");
             Object nmsPlayer = getHandle.invoke(player);
-            Field connectionField = nmsPlayer.getClass().getField("playerConnection");
+            Reflection.FieldAccessor<?> connectionField = Reflection.getField(nmsPlayer.getClass(),"playerConnection", PLAYER_CONNECTION_CLASS);
             connection = connectionField.get(nmsPlayer);
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not get player connection");
@@ -67,7 +69,8 @@ public class PacketSender {
 
     static {
         try {
-            sendPacket = Reflection.getMethod("PlayerConnection", "sendPacket", Reflection.getMinecraftClass("Packet"));
+            PLAYER_CONNECTION_CLASS = Reflection.getMinecraftClass("PlayerConnection");
+            sendPacket = Reflection.getMethod(PLAYER_CONNECTION_CLASS, "sendPacket", Reflection.getMinecraftClass("Packet"));
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not setup PacketSender");
             ex.printStackTrace();
