@@ -478,7 +478,6 @@ public abstract class TinyProtocol {
                 msg = onPacketInAsync(player, channel, msg);
             } catch (Exception e) {
                 plugin.getLogger().log(Level.SEVERE, "Error in onPacketInAsync().", e);
-                e.printStackTrace();
             }
 
             if (msg != null) {
