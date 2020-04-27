@@ -111,8 +111,8 @@ public class SignInput {
             return this;
         }
 
-        public Builder openOnFail(boolean reopenOnClose) {
-            this.openOnFail = reopenOnClose;
+        public Builder openOnFail(boolean openOnFail) {
+            this.openOnFail = openOnFail;
             return this;
         }
 
