@@ -61,6 +61,9 @@ public class InventoryItem {
         private boolean cancel = true;
         private boolean update = false;
 
+        private Builder() {
+        }
+
         public Builder item(ItemStack item) {
             this.item = item;
             return this;

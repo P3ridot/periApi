@@ -30,8 +30,7 @@ public class SignInput {
     private final TinyProtocol protocol;
 
     private String[] text;
-    private BiFunction<Player, String[], Boolean> completeFunction;
-    private boolean openOnFail;
+    private BiFunction<Player, String[], Response> completeFunction;
 
     private SignInput(Plugin plugin) {
         this.plugin = plugin;
@@ -46,7 +45,9 @@ public class SignInput {
                         result[i] = getText.invoke(casted[i]).toString();
                     }
 
-                    boolean response = completeFunction.apply(sender, result);
+                    Response response = completeFunction.apply(sender, result);
+
+                    boolean close = response.type == Response.Type.CLOSE;
 
                     Object blockPosition = SIGN_POSITION.get(packet);
 
@@ -57,8 +58,12 @@ public class SignInput {
                     Location signLocation = new Location(sender.getWorld(), signX, signY, signZ);
                     Block block = signLocation.getWorld().getBlockAt(signLocation);
 
-                    if (!response && openOnFail) {
-                        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender), 2);
+                    if (!close) {
+                        if (response.type == Response.Type.TEXT) {
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender, response.text), 2);
+                        } else {
+                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender), 2);
+                        }
                     } else {
                         sender.sendBlockChange(signLocation, block.getType(), block.getData());
                         protocol.close();
@@ -71,6 +76,10 @@ public class SignInput {
     }
 
     public void open(Player player) {
+        open(player, text);
+    }
+
+    private void open(Player player, String[] text) {
         Location location = player.getLocation();
         int y = 255;
         if (location.getBlockX() >= 128) {
@@ -97,10 +106,12 @@ public class SignInput {
     public static final class Builder {
 
         private String[] text = new String[]{"", "", "", ""};
-        private BiFunction<Player, String[], Boolean> completeFunction;
-        private boolean openOnFail = false;
+        private BiFunction<Player, String[], Response> completeFunction;
 
         private Plugin plugin;
+
+        private Builder() {
+        }
 
         public Builder text(String... text) {
             this.text = text;
@@ -108,22 +119,17 @@ public class SignInput {
         }
 
         public Builder text(List<String> text) {
-            this.text = new String[] {
-              text.get(0),
-              text.get(1),
+            this.text = new String[]{
+                    text.get(0),
+                    text.get(1),
               text.get(2),
               text.get(3)
             };
             return this;
         }
 
-        public Builder completeFunction(BiFunction<Player, String[], Boolean> completeFunction) {
+        public Builder completeFunction(BiFunction<Player, String[], Response> completeFunction) {
             this.completeFunction = completeFunction;
-            return this;
-        }
-
-        public Builder openOnFail(boolean openOnFail) {
-            this.openOnFail = openOnFail;
             return this;
         }
 
@@ -141,9 +147,53 @@ public class SignInput {
 
             signInput.text = this.text;
             signInput.completeFunction = completeFunction;
-            signInput.openOnFail = openOnFail;
 
             return signInput;
+        }
+    }
+
+    public static Response response() {
+        return new Response();
+    }
+
+    public static final class Response {
+
+        private Type type;
+        private String[] text;
+
+        private Response() {
+        }
+
+        public Response close() {
+            this.type = Type.CLOSE;
+            return this;
+        }
+
+        public Response reopen() {
+            this.type = Type.REOPEN;
+            return this;
+        }
+
+        public Response text(String... text) {
+            this.type = Type.TEXT;
+            this.text = text;
+            return this;
+        }
+
+        public Response text(List<String> text) {
+            this.text = new String[]{
+                    text.get(0),
+                    text.get(1),
+                    text.get(2),
+                    text.get(3)
+            };
+            return this;
+        }
+
+        private enum Type {
+            CLOSE,
+            REOPEN,
+            TEXT
         }
     }
 
