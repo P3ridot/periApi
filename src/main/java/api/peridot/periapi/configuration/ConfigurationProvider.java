@@ -2,8 +2,8 @@ package api.peridot.periapi.configuration;
 
 import api.peridot.periapi.items.ItemBuilder;
 import api.peridot.periapi.items.ItemParser;
-import api.peridot.periapi.utils.ColorUtil;
-import api.peridot.periapi.utils.NumberUtil;
+import api.peridot.periapi.utils.simple.ColorUtil;
+import api.peridot.periapi.utils.simple.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

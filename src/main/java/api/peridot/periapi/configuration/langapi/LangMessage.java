@@ -2,8 +2,9 @@ package api.peridot.periapi.configuration.langapi;
 
 import api.peridot.periapi.packets.NotificationPackets;
 import api.peridot.periapi.packets.PacketSender;
-import api.peridot.periapi.utils.ColorUtil;
-import org.apache.commons.lang.StringUtils;
+import api.peridot.periapi.utils.replacements.Replacement;
+import api.peridot.periapi.utils.replacements.ReplacementUtil;
+import api.peridot.periapi.utils.simple.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -95,7 +96,7 @@ public class LangMessage {
     }
 
     public List<String> getChatContent(Replacement... replacements) {
-        return chatContent.stream().map(s -> replace(s, replacements)).collect(Collectors.toList());
+        return chatContent.stream().map(s -> ReplacementUtil.replace(s, replacements)).collect(Collectors.toList());
     }
 
     /* Title */
@@ -105,11 +106,11 @@ public class LangMessage {
     }
 
     public String getTitleContent(Replacement... replacements) {
-        return replace(titleContent, replacements);
+        return ReplacementUtil.replace(titleContent, replacements);
     }
 
     public String getSubtitleContent(Replacement... replacements) {
-        return replace(subtitleContent, replacements);
+        return ReplacementUtil.replace(subtitleContent, replacements);
     }
 
     public int getFadeIn() {
@@ -131,16 +132,7 @@ public class LangMessage {
     }
 
     public String getActionBarContent(Replacement... replacements) {
-        return replace(actionBarContent, replacements);
+        return ReplacementUtil.replace(actionBarContent, replacements);
     }
 
-    /* Utils */
-
-    private String replace(String msg, Replacement... replacements) {
-        String toReturn = msg;
-        for (Replacement r : replacements) {
-            toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());
-        }
-        return toReturn;
-    }
 }

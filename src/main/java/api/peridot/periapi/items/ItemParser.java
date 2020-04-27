@@ -1,6 +1,6 @@
 package api.peridot.periapi.items;
 
-import api.peridot.periapi.utils.ColorUtil;
+import api.peridot.periapi.utils.simple.ColorUtil;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

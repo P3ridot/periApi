@@ -1,6 +1,7 @@
 package api.peridot.periapi.items;
 
-import api.peridot.periapi.configuration.langapi.Replacement;
+import api.peridot.periapi.utils.replacements.Replacement;
+import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.apache.commons.lang.StringUtils;
@@ -69,7 +70,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder replaceInName(Replacement... replacements) {
-        this.itemMeta.setDisplayName(replace(this.itemMeta.getDisplayName(), replacements));
+        this.itemMeta.setDisplayName(ReplacementUtil.replace(this.itemMeta.getDisplayName(), replacements));
         return this;
     }
 
@@ -113,7 +114,7 @@ public class ItemBuilder {
     public ItemBuilder replaceInLore(Replacement... replacements) {
         List<String> lore = this.itemMeta.hasLore() ? new ArrayList<>(this.itemMeta.getLore()) : new ArrayList<>();
         for (int i = 0; i < lore.size(); i++) {
-            lore.set(i, replace(lore.get(i), replacements));
+            lore.set(i, ReplacementUtil.replace(lore.get(i), replacements));
         }
         this.itemMeta.setLore(lore);
         return this;
@@ -244,14 +245,6 @@ public class ItemBuilder {
     public ItemStack build() {
         itemStack.setItemMeta(itemMeta);
         return itemStack;
-    }
-
-    private String replace(String msg, Replacement... replacements) {
-        String toReturn = msg;
-        for (Replacement r : replacements) {
-            toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());
-        }
-        return toReturn;
     }
 
 }

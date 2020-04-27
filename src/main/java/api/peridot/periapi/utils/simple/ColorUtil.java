@@ -1,4 +1,4 @@
-package api.peridot.periapi.utils;
+package api.peridot.periapi.utils.simple;
 
 import org.bukkit.ChatColor;
 

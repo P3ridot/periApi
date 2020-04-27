@@ -1,5 +1,6 @@
 package api.peridot.periapi.configuration.langapi;
 
+import api.peridot.periapi.utils.replacements.Replacement;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

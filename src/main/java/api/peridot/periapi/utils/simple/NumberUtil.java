@@ -1,6 +1,9 @@
-package api.peridot.periapi.utils;
+package api.peridot.periapi.utils.simple;
 
 public class NumberUtil {
+
+    private NumberUtil() {
+    }
 
     public static byte toByte(Object object) {
         if (object instanceof Number) {
@@ -43,7 +46,7 @@ public class NumberUtil {
             return Long.parseLong(object.toString());
         } catch (Exception ignored) {
         }
-        return 0;
+        return 0L;
     }
 
     public static float toFloat(Object object) {

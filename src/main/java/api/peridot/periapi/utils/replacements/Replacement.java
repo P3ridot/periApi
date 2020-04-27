@@ -1,4 +1,4 @@
-package api.peridot.periapi.configuration.langapi;
+package api.peridot.periapi.utils.replacements;
 
 public class Replacement {
 

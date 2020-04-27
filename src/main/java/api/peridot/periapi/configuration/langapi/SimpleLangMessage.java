@@ -1,6 +1,8 @@
 package api.peridot.periapi.configuration.langapi;
 
-import api.peridot.periapi.utils.ColorUtil;
+import api.peridot.periapi.utils.replacements.ReplacementUtil;
+import api.peridot.periapi.utils.simple.ColorUtil;
+import api.peridot.periapi.utils.replacements.Replacement;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -49,18 +51,10 @@ public class SimpleLangMessage {
     }
 
     public List<String> getChatContent(Replacement... replacements) {
-        return chatContent.stream().map(s -> replace(s, replacements)).collect(Collectors.toList());
+        return chatContent.stream().map(s -> ReplacementUtil.replace(s, replacements)).collect(Collectors.toList());
     }
 
     /* Utils */
-
-    public String replace(String msg, Replacement... replacements) {
-        String toReturn = msg;
-        for (Replacement r : replacements) {
-            toReturn = StringUtils.replace(toReturn, r.getFrom(), r.getTo());
-        }
-        return toReturn;
-    }
 
     public String getStringLine() {
         if (chatContent.size() == 1) return chatContent.get(0);
