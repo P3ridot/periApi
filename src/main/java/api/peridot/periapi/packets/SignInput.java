@@ -60,9 +60,9 @@ public class SignInput {
 
                     if (!close) {
                         if (response.type == Response.Type.TEXT) {
-                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender, response.text), 2);
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 2);
                         } else {
-                            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> open(sender), 2);
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 2);
                         }
                     } else {
                         sender.sendBlockChange(signLocation, block.getType(), block.getData());
@@ -79,7 +79,7 @@ public class SignInput {
         open(player, text);
     }
 
-    private void open(Player player, String[] text) {
+    private void open(Player player, String[] customText) {
         Location location = player.getLocation();
         int y = 255;
         if (location.getBlockX() >= 128) {
@@ -88,7 +88,7 @@ public class SignInput {
         location.setY(y);
 
         player.sendBlockChange(location, Material.SIGN_POST, (byte) 0);
-        player.sendSignChange(location, text);
+        player.sendSignChange(location, customText);
 
         try {
             Object openSign = packetPlayOutOpenSignEditor.invoke(blockPosition.invoke(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
