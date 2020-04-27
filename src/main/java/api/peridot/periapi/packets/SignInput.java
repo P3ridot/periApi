@@ -35,51 +35,44 @@ public class SignInput {
     private SignInput(Plugin plugin) {
         this.plugin = plugin;
 
-        getProtocol();
-    }
-
-    private TinyProtocol getProtocol() {
-        if (protocol != null && !protocol.closed) {
-            protocol = new TinyProtocol(plugin) {
-                @Override
-                public Object onPacketInAsync(Player sender, Channel channel, Object packet) {
-                    if (SIGN_MESSAGE.hasField(packet)) {
-                        String[] result = new String[4];
-                        Object[] casted = (Object[]) SIGN_MESSAGE.get(packet);
-                        for (int i = 0; i < 4; i++) {
-                            result[i] = getText.invoke(casted[i]).toString();
-                        }
-
-                        Response response = completeFunction.apply(sender, result);
-
-                        boolean close = response.type == Response.Type.CLOSE;
-
-                        Object blockPosition = SIGN_POSITION.get(packet);
-
-                        int signX = (int) getPositionX.invoke(blockPosition);
-                        int signY = (int) getPositionY.invoke(blockPosition);
-                        int signZ = (int) getPositionZ.invoke(blockPosition);
-
-                        Location signLocation = new Location(sender.getWorld(), signX, signY, signZ);
-                        Block block = signLocation.getWorld().getBlockAt(signLocation);
-
-                        if (!close) {
-                            if (response.type == Response.Type.TEXT) {
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 4);
-                            } else {
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 4);
-                            }
-                        } else {
-                            sender.sendBlockChange(signLocation, block.getType(), block.getData());
-                            protocol.close();
-                        }
+        protocol = new TinyProtocol(plugin) {
+            @Override
+            public Object onPacketInAsync(Player sender, Channel channel, Object packet) {
+                if (SIGN_MESSAGE.hasField(packet)) {
+                    String[] result = new String[4];
+                    Object[] casted = (Object[]) SIGN_MESSAGE.get(packet);
+                    for (int i = 0; i < 4; i++) {
+                        result[i] = getText.invoke(casted[i]).toString();
                     }
 
-                    return super.onPacketInAsync(sender, channel, packet);
+                    Response response = completeFunction.apply(sender, result);
+
+                    boolean close = response.type == Response.Type.CLOSE;
+
+                    Object blockPosition = SIGN_POSITION.get(packet);
+
+                    int signX = (int) getPositionX.invoke(blockPosition);
+                    int signY = (int) getPositionY.invoke(blockPosition);
+                    int signZ = (int) getPositionZ.invoke(blockPosition);
+
+                    Location signLocation = new Location(sender.getWorld(), signX, signY, signZ);
+                    Block block = signLocation.getWorld().getBlockAt(signLocation);
+
+                    if (!close) {
+                        if (response.type == Response.Type.TEXT) {
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender, response.text), 4);
+                        } else {
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> open(sender), 4);
+                        }
+                    } else {
+                        sender.sendBlockChange(signLocation, block.getType(), block.getData());
+                        protocol.close();
+                    }
                 }
-            };
-        }
-        return protocol;
+
+                return super.onPacketInAsync(sender, channel, packet);
+            }
+        };
     }
 
     public void open(Player player) {
@@ -104,7 +97,6 @@ public class SignInput {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        getProtocol();
     }
 
     public static Builder builder() {
