@@ -2,6 +2,8 @@ package api.peridot.periapi.configuration;
 
 import api.peridot.periapi.items.ItemBuilder;
 import api.peridot.periapi.items.ItemParser;
+import api.peridot.periapi.utils.replacements.Replacement;
+import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
 import api.peridot.periapi.utils.simple.NumberUtil;
 import org.bukkit.Bukkit;
@@ -38,13 +40,17 @@ public class ConfigurationProvider {
         return value;
     }
 
-    public String getString(String path) {
+    public String getString(String path, Replacement... replacements) {
         Object value = getObject(path);
-        return value instanceof String ? value.toString() : null;
+        String string = value instanceof String ? value.toString() : null;
+        if (string != null) {
+            string = ReplacementUtil.replace(string, replacements);
+        }
+        return string;
     }
 
-    public String getColoredString(String path) {
-        String value = ColorUtil.color(getString(path));
+    public String getColoredString(String path, Replacement... replacements) {
+        String value = ColorUtil.color(getString(path, replacements));
         if (value != null) {
             valuesMap.put(path, value);
         }
@@ -91,7 +97,7 @@ public class ConfigurationProvider {
         return (List<?>) ((value instanceof List) ? value : null);
     }
 
-    public List<String> getStringList(String path) {
+    public List<String> getStringList(String path, Replacement... replacements) {
         List<?> list = getList(path);
         if (list == null) {
             return new ArrayList<String>();
@@ -102,11 +108,11 @@ public class ConfigurationProvider {
                 result.add(String.valueOf(object));
             }
         }
-        return result;
+        return ReplacementUtil.replace(result, replacements);
     }
 
-    public List<String> getColoredStringList(String path) {
-        List<String> list = ColorUtil.color(getStringList(path));
+    public List<String> getColoredStringList(String path, Replacement... replacements) {
+        List<String> list = ColorUtil.color(getStringList(path, replacements));
         if (list != null) {
             valuesMap.put(path, list);
         }
