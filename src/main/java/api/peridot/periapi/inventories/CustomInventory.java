@@ -5,6 +5,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CustomInventory {
+public class CustomInventory implements InventoryHolder {
 
     private final Plugin plugin;
     private final PeriInventoryManager manager;
@@ -78,7 +79,7 @@ public class CustomInventory {
         return inventoryData;
     }
 
-    public Inventory getInventory(Player player) {
+    /*public Inventory getInventory(Player player) {
         PersonalInventoryData inventoryData = getPersonalInventoryData(player);
         Inventory inventory = inventoryData.getInventory();
 
@@ -88,21 +89,28 @@ public class CustomInventory {
         }
 
         return inventory;
+    }*/
+
+    @Override
+    public Inventory getInventory() {
+        return Bukkit.createInventory(this, this.rows * 9, this.title);
     }
 
     public BukkitTask getUpdateTask(Player player) {
         PersonalInventoryData inventoryData = getPersonalInventoryData(player);
         BukkitTask updateTask = inventoryData.getUpdateTask();
-        Inventory inventory = getInventory(player);
 
         if (updateTask == null) {
-            updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
-                @Override
-                public void run() {
-                    provider.update(player, content);
-                    content.fillInventory(inventory);
-                }
-            }, 0, this.updateDelay);
+            Inventory inventory = player.getOpenInventory().getTopInventory();
+            if (inventory != null && inventory.getHolder().equals(this)) {
+                updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
+                    @Override
+                    public void run() {
+                        provider.update(player, content);
+                        content.fillInventory(inventory);
+                    }
+                }, 0, this.updateDelay);
+            }
             inventoryData.setUpdateTask(updateTask);
         }
 
@@ -116,7 +124,7 @@ public class CustomInventory {
     }
 
     public void open(Player player) {
-        Inventory inventory = getInventory(player);
+        Inventory inventory = getInventory();
 
         provider.init(player, this.content);
         this.content.fillInventory(inventory);
@@ -133,10 +141,11 @@ public class CustomInventory {
     }
 
     public void update(Player player) {
-        Inventory inventory = getInventory(player);
-
-        provider.init(player, this.content);
-        this.content.fillInventory(inventory);
+        Inventory inventory = player.getOpenInventory().getTopInventory();
+        if (inventory != null && inventory.getHolder().equals(this)) {
+            provider.init(player, this.content);
+            this.content.fillInventory(inventory);
+        }
     }
 
     public static Builder builder() {
