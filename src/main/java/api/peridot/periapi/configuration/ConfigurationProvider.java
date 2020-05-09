@@ -7,6 +7,7 @@ import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
 import api.peridot.periapi.utils.simple.NumberUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -117,6 +118,19 @@ public class ConfigurationProvider {
             valuesMap.put(path, list);
         }
         return list;
+    }
+
+    public Color getColor(String path) {
+        Object value = valuesMap.get(path);
+        if (value == null) {
+            ConfigurationSection colorSection = section.getConfigurationSection(path);
+            int red = colorSection.getInt("red");
+            int green = colorSection.getInt("green");
+            int blue = colorSection.getInt("blue");
+            value = Color.fromRGB(red, green, blue);
+            valuesMap.put(path, value);
+        }
+        return value instanceof Color ? (Color) value : null;
     }
 
     public ItemStack getItemStack(String path) {
