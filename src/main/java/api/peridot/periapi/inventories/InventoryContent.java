@@ -152,7 +152,7 @@ public class InventoryContent {
     public List<Integer> emptySlots() {
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < getSize() - 1; i++) {
+        for (int i = 0; i < getSize(); i++) {
             if (isEmptySlot(i)) list.add(i);
         }
 
@@ -162,7 +162,7 @@ public class InventoryContent {
     public int firstEmptySlot() {
         int slot = -1;
 
-        for (int i = 0; i < getSize() - 1; i++) {
+        for (int i = 0; i < getSize(); i++) {
             if (isEmptySlot(i)) return i;
         }
 
@@ -171,8 +171,6 @@ public class InventoryContent {
 
     public void fillInventory(Inventory inventory) {
         inventory.clear();
-
-        System.out.println("inventory.getSize() = " + inventory.getSize());
 
         inventoryItems.forEach((slot, item) -> {
             if (slot + 1 <= inventory.getSize()) {
