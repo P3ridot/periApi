@@ -137,12 +137,9 @@ public class CustomInventory implements InventoryHolder {
         if (updateTask == null) {
             Inventory inventory = player.getOpenInventory().getTopInventory();
             if (inventory != null && inventory.getHolder().equals(this)) {
-                updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        provider.update(player, content);
-                        content.fillInventory(inventory);
-                    }
+                updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, () -> {
+                    provider.update(player, content);
+                    content.fillInventory(inventory);
                 }, 0, this.updateDelay);
             }
             inventoryData.setUpdateTask(updateTask);
