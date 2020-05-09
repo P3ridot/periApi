@@ -172,6 +172,8 @@ public class InventoryContent {
     public void fillInventory(Inventory inventory) {
         inventory.clear();
 
+        System.out.println("inventory.getSize() = " + inventory.getSize());
+
         inventoryItems.forEach((slot, item) -> {
             if (slot + 1 <= inventory.getSize()) {
                 if (item != null) {
