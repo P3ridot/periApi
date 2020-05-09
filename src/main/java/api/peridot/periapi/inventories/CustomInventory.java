@@ -200,7 +200,8 @@ public class CustomInventory implements InventoryHolder {
         private boolean closeable = true;
         private int updateDelay = -1;
 
-        private Consumer<InventoryCloseEvent> closeConsumer;
+        private Consumer<InventoryCloseEvent> closeConsumer = event -> {
+        };
 
         private Plugin plugin;
         private PeriInventoryManager manager;
