@@ -27,7 +27,6 @@ public class InventoryClickListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) return;
         Player player = (Player) event.getWhoClicked();
-        ItemStack clickedItem = event.getCurrentItem();
 
         if (periApi.getInventoryManager().getInventories().isEmpty()) return;
         for (CustomInventory customInventory : periApi.getInventoryManager().getInventories()) {
@@ -44,7 +43,6 @@ public class InventoryClickListener implements Listener {
                 ItemStack item = inventoryItem.getItem();
                 if (item == null || item.getType() == Material.AIR) continue;
                 if (slot != event.getSlot()) continue;
-                ;
 
                 inventoryItem.run(event);
 

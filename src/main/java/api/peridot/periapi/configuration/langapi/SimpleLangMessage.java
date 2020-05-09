@@ -1,9 +1,8 @@
 package api.peridot.periapi.configuration.langapi;
 
+import api.peridot.periapi.utils.replacements.Replacement;
 import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
-import api.peridot.periapi.utils.replacements.Replacement;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;

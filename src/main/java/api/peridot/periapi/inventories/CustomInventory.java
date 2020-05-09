@@ -1,9 +1,11 @@
 package api.peridot.periapi.inventories;
 
 import api.peridot.periapi.inventories.providers.InventoryProvider;
+import api.peridot.periapi.packets.Reflection;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
@@ -19,7 +21,10 @@ public class CustomInventory implements InventoryHolder {
     private final PeriInventoryManager manager;
 
     private String title;
+    private InventoryType inventoryType;
     private int rows;
+    private int columns;
+    private int size;
     private boolean closeable;
     private int updateDelay;
 
@@ -28,11 +33,48 @@ public class CustomInventory implements InventoryHolder {
 
     private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
 
-    private CustomInventory(Plugin plugin, PeriInventoryManager manager, int rows) {
+    private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryType inventoryType, int rows) {
         this.plugin = plugin;
         this.manager = manager;
+        this.inventoryType = inventoryType;
         this.rows = rows;
-        this.content = new InventoryContent(rows);
+        this.columns = 9;
+        if (inventoryType != null) {
+            if (inventoryType == InventoryType.ANVIL) {
+                rows = 1;
+                columns = 3;
+            } else if (inventoryType == InventoryType.BEACON) {
+                rows = 1;
+                columns = 1;
+            } else if (inventoryType == InventoryType.BREWING) {
+                rows = 1;
+                if (Reflection.serverVersionNumber < 9) {
+                    columns = 3;
+                } else {
+                    columns = 4;
+                }
+            } else if (inventoryType == InventoryType.DISPENSER) {
+                rows = 3;
+                columns = 3;
+            } else if (inventoryType == InventoryType.DROPPER) {
+                rows = 3;
+                columns = 3;
+            } else if (inventoryType == InventoryType.ENCHANTING) {
+                rows = 1;
+                columns = 2;
+            } else if (inventoryType == InventoryType.FURNACE) {
+                rows = 1;
+                columns = 3;
+            } else if (inventoryType == InventoryType.HOPPER) {
+                rows = 1;
+                columns = 5;
+            } else if (inventoryType == InventoryType.WORKBENCH) {
+                rows = 2;
+                columns = 5;
+            }
+        }
+        this.content = new InventoryContent(rows, columns);
+        this.size = rows * columns;
         manager.addInventory(this);
     }
 
@@ -79,21 +121,13 @@ public class CustomInventory implements InventoryHolder {
         return inventoryData;
     }
 
-    /*public Inventory getInventory(Player player) {
-        PersonalInventoryData inventoryData = getPersonalInventoryData(player);
-        Inventory inventory = inventoryData.getInventory();
-
-        if (inventory == null) {
-            inventory = Bukkit.createInventory(player, rows * 9, title);
-            inventoryData.setInventory(inventory);
-        }
-
-        return inventory;
-    }*/
-
     @Override
     public Inventory getInventory() {
-        return Bukkit.createInventory(this, this.rows * 9, this.title);
+        if (inventoryType == null) {
+            return Bukkit.createInventory(this, this.rows * 9, this.title);
+        } else {
+            return Bukkit.createInventory(this, this.inventoryType, this.title);
+        }
     }
 
     public BukkitTask getUpdateTask(Player player) {
@@ -155,6 +189,7 @@ public class CustomInventory implements InventoryHolder {
     public static final class Builder {
 
         private String title = "";
+        private InventoryType inventoryType;
         private int rows = 6;
         private boolean closeable = true;
         private int updateDelay = -1;
@@ -169,6 +204,11 @@ public class CustomInventory implements InventoryHolder {
 
         public Builder title(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder inventoryType(InventoryType inventoryType) {
+            this.inventoryType = inventoryType;
             return this;
         }
 
@@ -220,7 +260,7 @@ public class CustomInventory implements InventoryHolder {
                 throw new IllegalStateException("The provider of the CustomInventory.Builder is required");
             }
 
-            CustomInventory inventory = new CustomInventory(plugin, manager, rows);
+            CustomInventory inventory = new CustomInventory(this.plugin, this.manager, this.inventoryType, this.rows);
 
             inventory.title = this.title;
             inventory.closeable = this.closeable;

@@ -12,18 +12,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InventoryContent {
 
     private final int rows;
+    private final int columns;
+    private final int size;
     private final Map<Integer, InventoryItem> inventoryItems = new ConcurrentHashMap<>();
 
-    public InventoryContent(int rows) {
+    public InventoryContent(int rows, int columns) {
         this.rows = rows;
+        this.columns = columns;
+        this.size = rows * columns;
     }
 
     public int getRows() {
         return rows;
     }
 
-    public int getInventorySize() {
-        return rows * 9;
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public Collection<InventoryItem> getItems() {
@@ -43,13 +51,18 @@ public class InventoryContent {
     }
 
     public void setItem(int row, int column, InventoryItem inventoryItem) {
+        Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
+        Validate.isTrue(row <= getRows(), "Row value must be smaller or equal " + getRows());
+        Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
+        Validate.isTrue(column <= getColumns(), "Column value must be smaller or equal " + getColumns());
+
         this.setItem(slotFromRowAndColumn(row, column), inventoryItem);
     }
 
     public void setItem(int slot, InventoryItem inventoryItem) {
         Validate.notNull(inventoryItem, "Item cannot be null");
         Validate.isTrue(slot >= 0, "Slot must be bigger or equal 0");
-        Validate.isTrue(slot <= getInventorySize() - 1, "Slot must be smaller or equal " + (getInventorySize() - 1));
+        Validate.isTrue(slot <= getSize() - 1, "Slot must be smaller or equal " + (getSize() - 1));
         inventoryItems.put(slot, inventoryItem);
     }
 
@@ -60,7 +73,7 @@ public class InventoryContent {
     }
 
     public void fill(InventoryItem inventoryItem) {
-        for (int i = 0; i < getInventorySize(); i++) {
+        for (int i = 0; i < getSize(); i++) {
             setItem(i, inventoryItem);
         }
     }
@@ -73,19 +86,19 @@ public class InventoryContent {
 
     public void fillRow(int row, InventoryItem inventoryItem) {
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
+        Validate.isTrue(row <= getRows(), "Row value must be smaller or equal " + getRows());
 
-        for (int i = 0; i < 9; i++) {
-            setItem((row - 1) * 9 + i, inventoryItem);
+        for (int i = 0; i < getColumns(); i++) {
+            setItem((row - 1) * getColumns() + i, inventoryItem);
         }
     }
 
     public void fillRowEmpty(int row, InventoryItem inventoryItem) {
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
+        Validate.isTrue(row <= getRows(), "Row value must be smaller or equal " + getRows());
 
-        for (int i = 0; i < 9; i++) {
-            int slot = (row - 1) * 9 + i;
+        for (int i = 0; i < getColumns(); i++) {
+            int slot = (row - 1) * getColumns() + i;
             if (!isEmptySlot(slot)) continue;
             setItem(slot, inventoryItem);
         }
@@ -93,33 +106,33 @@ public class InventoryContent {
 
     public void fillColumn(int column, InventoryItem inventoryItem) {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
-        Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
+        Validate.isTrue(column <= getColumns(), "Column value must be smaller or equal " + getColumns());
 
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < getRows(); i++) {
             setItem((column + (i * 9)) - 1, inventoryItem);
         }
     }
 
     public void fillColumnEmpty(int column, InventoryItem inventoryItem) {
         Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
-        Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
+        Validate.isTrue(column <= 9, "Column value must be smaller or equal " + getColumns());
 
-        for (int i = 0; i < rows; i++) {
-            int slot = (column + (i * 9)) - 1;
+        for (int i = 0; i < getRows(); i++) {
+            int slot = (column + (i * getColumns())) - 1;
             if (!isEmptySlot(slot)) continue;
             setItem(slot, inventoryItem);
         }
     }
 
     public int slotFromRowAndColumn(int row, int column) {
-        Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
-        Validate.isTrue(column <= 9, "Column value must be smaller or equal 9");
         Validate.isTrue(row >= 1, "Row value must be bigger or equal 1");
-        Validate.isTrue(row <= rows, "Row value must be smaller or equal " + rows);
+        Validate.isTrue(row <= getRows(), "Row value must be smaller or equal " + getRows());
+        Validate.isTrue(column >= 1, "Column value must be bigger or equal 1");
+        Validate.isTrue(column <= getColumns(), "Column value must be smaller or equal " + getColumns());
 
         int slot = 0;
 
-        slot += (row - 1) * 9;
+        slot += (row - 1) * getColumns();
         slot += column;
 
         return slot - 1;
@@ -139,7 +152,7 @@ public class InventoryContent {
     public List<Integer> emptySlots() {
         List<Integer> list = new ArrayList<>();
 
-        for (int i = 0; i < getInventorySize() - 1; i++) {
+        for (int i = 0; i < getSize() - 1; i++) {
             if (isEmptySlot(i)) list.add(i);
         }
 
@@ -149,7 +162,7 @@ public class InventoryContent {
     public int firstEmptySlot() {
         int slot = -1;
 
-        for (int i = 0; i < getInventorySize() - 1; i++) {
+        for (int i = 0; i < getSize() - 1; i++) {
             if (isEmptySlot(i)) return i;
         }
 
@@ -202,7 +215,7 @@ public class InventoryContent {
         }
 
         public SlotIterator slotTo(int slot) {
-            Validate.isTrue(slot <= getInventorySize() - 1, "End slot must be smaller or equal " + (getInventorySize() - 1));
+            Validate.isTrue(slot <= getSize() - 1, "End slot must be smaller or equal " + (getSize() - 1));
 
             this.slotTo = slot;
             return this;
@@ -210,19 +223,19 @@ public class InventoryContent {
 
         public SlotIterator slotFrom(int row, int column) {
             Validate.isTrue(row >= 1, "Start row value must be bigger or equal 1");
-            Validate.isTrue(row <= rows, "Start row value must be smaller or equal " + rows);
+            Validate.isTrue(row <= getRows(), "Start row value must be smaller or equal " + getRows());
             Validate.isTrue(column >= 1, "Start column value must be bigger or equal 1");
-            Validate.isTrue(column <= 9, "Start column value must be smaller or equal 9");
+            Validate.isTrue(column <= getColumns(), "Start column value must be smaller or equal " + getColumns());
 
             this.slotFrom = slotFromRowAndColumn(row, column);
             return this;
         }
 
         public SlotIterator slotTo(int row, int column) {
-            Validate.isTrue(row >= 1, "End row value must be bigger or equal 1");
-            Validate.isTrue(row <= rows, "End row value must be smaller or equal " + rows);
-            Validate.isTrue(column >= 1, "End column value must be bigger or equal 1");
-            Validate.isTrue(column <= 9, "End column value must be smaller or equal 9");
+            Validate.isTrue(row >= 1, "Start row value must be bigger or equal 1");
+            Validate.isTrue(row <= getRows(), "Start row value must be smaller or equal " + getRows());
+            Validate.isTrue(column >= 1, "Start column value must be bigger or equal 1");
+            Validate.isTrue(column <= getColumns(), "Start column value must be smaller or equal " + getColumns());
 
             this.slotTo = slotFromRowAndColumn(row, column);
             return this;
@@ -248,7 +261,7 @@ public class InventoryContent {
                 if (!loop && i + 1 > items.size()) return;
                 if (loop && i + 1 > items.size()) {
                     i = (i % items.size()) - 1;
-                    if(i < 0) i = 0;
+                    if (i < 0) i = 0;
                 }
                 if (onlyEmpty && !isEmptySlot(slot)) continue;
                 setItem(slot, items.get(i));

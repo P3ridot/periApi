@@ -4,7 +4,6 @@ import api.peridot.periapi.utils.replacements.Replacement;
 import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
