@@ -5,6 +5,7 @@ import api.peridot.periapi.packets.Reflection;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -14,6 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class CustomInventory implements InventoryHolder {
 
@@ -28,14 +30,17 @@ public class CustomInventory implements InventoryHolder {
     private boolean closeable;
     private int updateDelay;
 
+    private Consumer<InventoryCloseEvent> closeConsumer;
+
     private InventoryProvider provider;
     private InventoryContent content;
 
     private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
 
-    private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryType inventoryType, int rows) {
+    private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryProvider provider, InventoryType inventoryType, int rows) {
         this.plugin = plugin;
         this.manager = manager;
+        this.provider = provider;
         this.inventoryType = inventoryType;
         this.rows = rows;
         this.columns = 9;
@@ -78,14 +83,6 @@ public class CustomInventory implements InventoryHolder {
         manager.addInventory(this);
     }
 
-    private Plugin getPlugin() {
-        return plugin;
-    }
-
-    private PeriInventoryManager getManager() {
-        return manager;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -94,12 +91,24 @@ public class CustomInventory implements InventoryHolder {
         return rows;
     }
 
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
     public boolean isCloseable() {
         return closeable;
     }
 
     public int getUpdateDelay() {
         return updateDelay;
+    }
+
+    public Consumer<InventoryCloseEvent> getCloseConsumer() {
+        return closeConsumer;
     }
 
     public InventoryProvider getProvider() {
@@ -191,6 +200,8 @@ public class CustomInventory implements InventoryHolder {
         private boolean closeable = true;
         private int updateDelay = -1;
 
+        private Consumer<InventoryCloseEvent> closeConsumer;
+
         private Plugin plugin;
         private PeriInventoryManager manager;
         private InventoryProvider provider;
@@ -221,6 +232,11 @@ public class CustomInventory implements InventoryHolder {
 
         public Builder updateDelay(int delay) {
             this.updateDelay = delay;
+            return this;
+        }
+
+        public Builder closeConsumer(Consumer<InventoryCloseEvent> closeConsumer) {
+            this.closeConsumer = closeConsumer;
             return this;
         }
 
@@ -257,12 +273,12 @@ public class CustomInventory implements InventoryHolder {
                 throw new IllegalStateException("The provider of the CustomInventory.Builder is required");
             }
 
-            CustomInventory inventory = new CustomInventory(this.plugin, this.manager, this.inventoryType, this.rows);
+            CustomInventory inventory = new CustomInventory(this.plugin, this.manager, this.provider, this.inventoryType, this.rows);
 
             inventory.title = this.title;
             inventory.closeable = this.closeable;
             inventory.updateDelay = this.updateDelay;
-            inventory.provider = this.provider;
+            inventory.closeConsumer = this.closeConsumer;
 
             if (content != null) inventory.content = this.content;
 
