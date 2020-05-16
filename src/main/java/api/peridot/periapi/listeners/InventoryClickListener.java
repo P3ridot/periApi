@@ -31,6 +31,7 @@ public class InventoryClickListener implements Listener {
         if (periApi.getInventoryManager().getInventories().isEmpty()) return;
         for (CustomInventory customInventory : periApi.getInventoryManager().getInventories()) {
             if (!(event.getView().getTopInventory().getHolder().equals(customInventory))) continue;
+            if (!event.getClickedInventory().equals(player.getOpenInventory().getTopInventory())) return;
 
             InventoryContent content = customInventory.getContent();
 
