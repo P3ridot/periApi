@@ -64,10 +64,14 @@ public class NotificationPackets {
 
     public static Object createActionBarPacket(String text) {
         Object packet = null;
-        if (chatMessageTypeClass != null) {
-            packet = packetPlayOutChatConstructor.invoke(CommonPackets.createBaseComponent(text), chatMessageType);
-        } else {
-            packet = packetPlayOutChatConstructor.invoke(CommonPackets.createBaseComponent(text), (byte) 2);
+        try {
+            if (chatMessageTypeClass != null) {
+                packet = packetPlayOutChatConstructor.invoke(CommonPackets.createBaseComponent(text), chatMessageType);
+            } else {
+                packet = packetPlayOutChatConstructor.invoke(CommonPackets.createBaseComponent(text), (byte) 2);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return packet;
     }

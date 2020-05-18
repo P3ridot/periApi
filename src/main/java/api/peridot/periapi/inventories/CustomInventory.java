@@ -21,6 +21,7 @@ public class CustomInventory implements InventoryHolder {
 
     private final Plugin plugin;
     private final PeriInventoryManager manager;
+    private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
 
     private String title;
     private InventoryType inventoryType;
@@ -31,11 +32,8 @@ public class CustomInventory implements InventoryHolder {
     private int updateDelay;
 
     private Consumer<InventoryCloseEvent> closeConsumer;
-
     private InventoryProvider provider;
     private InventoryContent content;
-
-    private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
 
     private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryProvider provider, InventoryType inventoryType, int rows) {
         this.plugin = plugin;
@@ -81,6 +79,10 @@ public class CustomInventory implements InventoryHolder {
         this.content = new InventoryContent(rows, columns);
         this.size = rows * columns;
         manager.addInventory(this);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getTitle() {
@@ -186,10 +188,6 @@ public class CustomInventory implements InventoryHolder {
             provider.init(player, this.content);
             this.content.fillInventory(inventory);
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static final class Builder {
