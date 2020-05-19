@@ -1,5 +1,5 @@
 group 'api.peridot.periapi'
-version '1.2'
+version '1.2.6'
 
 apply plugin: 'java'
 
