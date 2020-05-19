@@ -53,7 +53,7 @@ public class NotificationPackets {
         try {
             Object titlePacket = packetPlayOutTitleConstructor.invoke(titleEnum, CommonPackets.createBaseComponent(title), -1, -1, -1);
             Object subtitlePacket = packetPlayOutTitleConstructor.invoke(subtitleEnum, CommonPackets.createBaseComponent(subTitle), -1, -1, -1);
-            Object timesPacket = packetPlayOutTitleConstructor.invoke(timesEnum, null, 10, 20, 20);
+            Object timesPacket = packetPlayOutTitleConstructor.invoke(timesEnum, null, fadeIn, stay, fadeOut);
 
             packets.addAll(Arrays.asList(titlePacket, subtitlePacket, timesPacket));
         } catch (Exception ex) {

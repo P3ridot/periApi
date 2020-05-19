@@ -32,6 +32,7 @@ public class CustomInventory implements InventoryHolder {
     private int updateDelay;
 
     private Consumer<InventoryCloseEvent> closeConsumer;
+
     private InventoryProvider provider;
     private InventoryContent content;
 
@@ -87,6 +88,10 @@ public class CustomInventory implements InventoryHolder {
 
     public String getTitle() {
         return title;
+    }
+
+    public InventoryType getInventoryType() {
+        return inventoryType;
     }
 
     public int getRows() {
