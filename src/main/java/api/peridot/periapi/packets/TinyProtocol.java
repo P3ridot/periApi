@@ -465,6 +465,7 @@ public abstract class TinyProtocol {
      * @author Kristian
      */
     private final class PacketInterceptor extends ChannelDuplexHandler {
+
         // Updated by the login event
         public volatile Player player;
 
@@ -504,5 +505,7 @@ public abstract class TinyProtocol {
                 channelLookup.put(profile.getName(), channel);
             }
         }
+
     }
+
 }

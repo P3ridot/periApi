@@ -288,6 +288,7 @@ public class CustomInventory implements InventoryHolder {
 
             return inventory;
         }
+
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
  * @author Kristian
  */
 public final class Reflection {
+
     public static String serverVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     public static final int serverVersionNumber = Integer.parseInt(serverVersion.split("_")[1]);
     public static final boolean usePre12Methods = serverVersionNumber < 12;
@@ -23,6 +24,7 @@ public final class Reflection {
      * An interface for invoking a specific constructor.
      */
     public interface ConstructorInvoker {
+
         /**
          * Invoke a constructor for a specific class.
          *
@@ -30,12 +32,14 @@ public final class Reflection {
          * @return The constructed object.
          */
         public Object invoke(Object... arguments);
+
     }
 
     /**
      * An interface for invoking a specific method.
      */
     public interface MethodInvoker {
+
         /**
          * Invoke a method on a specific target object.
          *
@@ -44,6 +48,7 @@ public final class Reflection {
          * @return The return value, or NULL if is void.
          */
         public Object invoke(Object target, Object... arguments);
+
     }
 
     /**
@@ -52,6 +57,7 @@ public final class Reflection {
      * @param <T> - field type.
      */
     public interface FieldAccessor<T> {
+
         /**
          * Retrieve the content of a field.
          *
@@ -75,6 +81,7 @@ public final class Reflection {
          * @return TRUE if it does, FALSE otherwise.
          */
         public boolean hasField(Object target);
+
     }
 
     // Deduce the net.minecraft.server.v* package
@@ -404,4 +411,5 @@ public final class Reflection {
         matcher.appendTail(output);
         return output.toString();
     }
+
 }

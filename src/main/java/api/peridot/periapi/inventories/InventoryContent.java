@@ -196,6 +196,7 @@ public class InventoryContent {
     }
 
     public class SlotIterator {
+
         private final List<InventoryItem> items;
 
         private int slotFrom = 0;
@@ -268,5 +269,7 @@ public class InventoryContent {
                 i++;
             }
         }
+
     }
+
 }

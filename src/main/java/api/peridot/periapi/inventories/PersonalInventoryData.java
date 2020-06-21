@@ -28,4 +28,5 @@ public class PersonalInventoryData {
     public void setOpenedPage(int openedPage) {
         this.openedPage = openedPage;
     }
+
 }

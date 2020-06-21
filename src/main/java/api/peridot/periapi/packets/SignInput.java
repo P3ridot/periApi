@@ -150,6 +150,7 @@ public class SignInput {
 
             return signInput;
         }
+
     }
 
     public static Response response() {
@@ -196,6 +197,7 @@ public class SignInput {
             REOPEN,
             TEXT
         }
+
     }
 
 }

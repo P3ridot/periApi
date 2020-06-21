@@ -19,18 +19,17 @@ public class SimpleLangMessage {
 
     public SimpleLangMessage(ConfigurationSection section) {
         try {
-            useChat = section.get("chat.content") != null;
-            if (section.isString("chat.content")) {
-                chatContent.add(ColorUtil.color(section.getString("chat.content")));
-            } else if (section.isList("chat.content")) {
-                chatContent = ColorUtil.color(section.getStringList("chat.content"));
+            useChat = section.get("content") != null;
+            if (section.isString("content")) {
+                chatContent.add(ColorUtil.color(section.getString("content")));
+            } else if (section.isList("content")) {
+                chatContent = ColorUtil.color(section.getStringList("content"));
             }
         } catch (Exception ignored) {
         }
     }
 
     /* Sending */
-
     public void broadcast(Replacement... replacements) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             send(player, replacements);
@@ -44,7 +43,6 @@ public class SimpleLangMessage {
     }
 
     /* Chat */
-
     public boolean useChat() {
         return useChat;
     }
@@ -54,9 +52,9 @@ public class SimpleLangMessage {
     }
 
     /* Utils */
-
     public String getStringLine() {
         if (chatContent.size() == 1) return chatContent.get(0);
         return chatContent.toString();
     }
+
 }

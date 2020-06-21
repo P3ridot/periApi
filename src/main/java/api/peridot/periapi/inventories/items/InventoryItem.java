@@ -55,6 +55,7 @@ public class InventoryItem {
     }
 
     public static final class Builder {
+
         private ItemStack item;
         private Consumer<InventoryClickEvent> consumer = event -> {
         };
@@ -92,5 +93,7 @@ public class InventoryItem {
         public InventoryItem build() {
             return new InventoryItem(item, consumer, cancel, update);
         }
+
     }
+
 }

@@ -57,4 +57,5 @@ public class ItemParser {
 
         return enchantmentsMap;
     }
+
 }

@@ -60,7 +60,6 @@ public class LangMessage {
     }
 
     /* Sending */
-
     public void broadcast(Replacement... replacements) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             send(player, replacements);
@@ -86,7 +85,6 @@ public class LangMessage {
     }
 
     /* Chat */
-
     public boolean useChat() {
         return useChat;
     }
@@ -100,7 +98,6 @@ public class LangMessage {
     }
 
     /* Title */
-
     public boolean useTitle() {
         return useTitle;
     }
@@ -126,7 +123,6 @@ public class LangMessage {
     }
 
     /* Actionbar */
-
     public boolean useActionBar() {
         return useActionBar;
     }
