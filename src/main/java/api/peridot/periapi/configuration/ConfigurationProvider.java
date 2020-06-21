@@ -6,10 +6,10 @@ import api.peridot.periapi.utils.replacements.Replacement;
 import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
 import api.peridot.periapi.utils.simple.NumberUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +19,18 @@ import java.util.logging.Logger;
 
 public class ConfigurationProvider {
 
-    private final ConfigurationSection section;
     private final Logger logger;
 
     private final Map<String, Object> valuesMap = new ConcurrentHashMap<>();
 
-    public ConfigurationProvider(ConfigurationSection section) {
+    private ConfigurationSection section;
+
+    public ConfigurationProvider(Plugin plugin) {
+        this.logger = plugin.getLogger();
+    }
+
+    public void setSection(ConfigurationSection section) {
         this.section = section;
-        this.logger = Bukkit.getLogger();
-        reload();
     }
 
     public Object getObject(String path) {
