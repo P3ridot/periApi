@@ -6,6 +6,7 @@ import api.peridot.periapi.utils.replacements.Replacement;
 import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
 import api.peridot.periapi.utils.simple.NumberUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,16 @@ public class ConfigurationProvider {
     private final Map<String, Object> valuesMap = new ConcurrentHashMap<>();
 
     private ConfigurationSection section;
+
+    public ConfigurationProvider(Plugin plugin, ConfigurationSection section) {
+        this.logger = plugin.getLogger();
+        this.section = section;
+    }
+
+    public ConfigurationProvider(ConfigurationSection section) {
+        this.logger = Bukkit.getLogger();
+        this.section = section;
+    }
 
     public ConfigurationProvider(Plugin plugin) {
         this.logger = plugin.getLogger();
