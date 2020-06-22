@@ -42,6 +42,10 @@ public class ConfigurationFile extends ConfigurationProvider {
         setSection(yamlConfiguration.getConfigurationSection(sectionName));
     }
 
+    public String getDirectory() {
+        return plugin.getDataFolder() + "/" + getFileName() + ".yml";
+    }
+
     public String getFileName() {
         return fileName;
     }
