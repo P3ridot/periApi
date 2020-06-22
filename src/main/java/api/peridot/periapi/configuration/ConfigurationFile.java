@@ -42,6 +42,14 @@ public class ConfigurationFile extends ConfigurationProvider {
         setSection(yamlConfiguration.getConfigurationSection(sectionName));
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
     public YamlConfiguration getYamlConfiguration() {
         return yamlConfiguration;
     }
