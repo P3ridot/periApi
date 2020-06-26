@@ -32,7 +32,7 @@ public class LangMessage {
 
     public LangMessage(ConfigurationSection section) {
         try {
-            useChat = section.isString("chat.content") || section.isList("chat.content");
+            useChat = section.getBoolean("chat.enabled");
             useChatIfNotPlayer = section.getBoolean("chat.send-if-not-player");
             if (useChat || useChatIfNotPlayer) {
                 if (section.isString("chat.content")) {
@@ -42,7 +42,7 @@ public class LangMessage {
                 }
             }
 
-            useTitle = section.isString("title.content") || section.isString("title.sub-content");
+            useTitle = section.getBoolean("title.enabled");
             if (useTitle) {
                 titleContent = ColorUtil.color(section.getString("title.content"));
                 subtitleContent = ColorUtil.color(section.getString("title.sub-content"));
@@ -51,7 +51,7 @@ public class LangMessage {
                 fadeOut = section.getInt("title.fade-out");
             }
 
-            useActionBar = section.isString("actionbar.content");
+            useActionBar = section.getBoolean("actionbar.enabled");
             if (useActionBar) {
                 actionBarContent = ColorUtil.color(section.getString("actionbar.content"));
             }
