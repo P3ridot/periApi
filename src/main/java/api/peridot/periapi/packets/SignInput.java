@@ -23,11 +23,11 @@ public class SignInput {
     private final Reflection.MethodInvoker getPositionX = Reflection.getMethod(blockPositionClass, "getX");
     private final Reflection.MethodInvoker getPositionY = Reflection.getMethod(blockPositionClass, "getY");
     private final Reflection.MethodInvoker getPositionZ = Reflection.getMethod(blockPositionClass, "getZ");
-    private final Reflection.FieldAccessor<?> SIGN_POSITION = Reflection.getField(packetPlayInUpdateSign, "a", blockPositionClass);
-    private final Reflection.FieldAccessor<?> SIGN_MESSAGE = Reflection.getField(packetPlayInUpdateSign, "b", chatBaseComponentArrayClass);
+    private final Reflection.FieldAccessor<?> signPosition = Reflection.getField(packetPlayInUpdateSign, "a", blockPositionClass);
+    private final Reflection.FieldAccessor<?> signMessage = Reflection.getField(packetPlayInUpdateSign, "b", chatBaseComponentArrayClass);
 
     private final Plugin plugin;
-    private TinyProtocol protocol;
+    private final TinyProtocol protocol;
 
     private String[] text;
     private BiFunction<Player, String[], Response> completeFunction;
@@ -38,9 +38,9 @@ public class SignInput {
         protocol = new TinyProtocol(plugin) {
             @Override
             public Object onPacketInAsync(Player sender, Channel channel, Object packet) {
-                if (SIGN_MESSAGE.hasField(packet)) {
+                if (signMessage.hasField(packet)) {
                     String[] result = new String[4];
-                    Object[] casted = (Object[]) SIGN_MESSAGE.get(packet);
+                    Object[] casted = (Object[]) signMessage.get(packet);
                     for (int i = 0; i < 4; i++) {
                         result[i] = getText.invoke(casted[i]).toString();
                     }
@@ -49,7 +49,7 @@ public class SignInput {
 
                     boolean close = response.type == Response.Type.CLOSE;
 
-                    Object blockPosition = SIGN_POSITION.get(packet);
+                    Object blockPosition = signPosition.get(packet);
 
                     int signX = (int) getPositionX.invoke(blockPosition);
                     int signY = (int) getPositionY.invoke(blockPosition);

@@ -8,13 +8,13 @@ import java.util.List;
 
 public class PacketSender {
 
-    private static Class<?> playerConnectionClass;
-    private static Reflection.MethodInvoker sendPacket;
+    private static Class<?> PLAYER_CONNECTION_CLASS;
+    private static Reflection.MethodInvoker SEND_PACKET;
 
     static {
         try {
-            playerConnectionClass = Reflection.getMinecraftClass("PlayerConnection");
-            sendPacket = Reflection.getMethod(playerConnectionClass, "sendPacket", Reflection.getMinecraftClass("Packet"));
+            PLAYER_CONNECTION_CLASS = Reflection.getMinecraftClass("PlayerConnection");
+            SEND_PACKET = Reflection.getMethod(PLAYER_CONNECTION_CLASS, "sendPacket", Reflection.getMinecraftClass("Packet"));
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not setup PacketSender");
             ex.printStackTrace();
@@ -52,7 +52,7 @@ public class PacketSender {
         if (player == null) return;
         try {
             for (Object packet : packets) {
-                sendPacket.invoke(getConnection(player), packet);
+                SEND_PACKET.invoke(getConnection(player), packet);
             }
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not send packet to player");
@@ -65,7 +65,7 @@ public class PacketSender {
         try {
             Reflection.MethodInvoker getHandle = Reflection.getMethod(player.getClass(), "getHandle");
             Object nmsPlayer = getHandle.invoke(player);
-            Reflection.FieldAccessor<?> connectionField = Reflection.getField(nmsPlayer.getClass(), "playerConnection", playerConnectionClass);
+            Reflection.FieldAccessor<?> connectionField = Reflection.getField(nmsPlayer.getClass(), "playerConnection", PLAYER_CONNECTION_CLASS);
             connection = connectionField.get(nmsPlayer);
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not get player connection");

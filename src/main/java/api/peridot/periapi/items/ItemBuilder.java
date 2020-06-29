@@ -20,7 +20,7 @@ import java.util.*;
 
 public class ItemBuilder {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
     private ItemMeta itemMeta;
 
     public ItemBuilder(Material material) {

@@ -1,7 +1,6 @@
 package api.peridot.periapi.configuration.langapi;
 
 import api.peridot.periapi.packets.NotificationPackets;
-import api.peridot.periapi.packets.PacketSender;
 import api.peridot.periapi.utils.replacements.Replacement;
 import api.peridot.periapi.utils.replacements.ReplacementUtil;
 import api.peridot.periapi.utils.simple.ColorUtil;
@@ -75,11 +74,11 @@ public class LangMessage {
             if (useTitle) {
                 String titleMsg = getTitleContent(replacements);
                 String subtitleMsg = getSubtitleContent(replacements);
-                PacketSender.sendPacket(player, NotificationPackets.createTitlePacket(titleMsg, subtitleMsg, fadeIn, stay, fadeOut));
+                NotificationPackets.sendTitle(player, titleMsg, subtitleMsg, fadeIn, stay, fadeOut);
             }
             if (useActionBar) {
                 String actionBarMsg = getActionBarContent(replacements);
-                PacketSender.sendPacket(player, NotificationPackets.createActionBarPacket(actionBarMsg));
+                NotificationPackets.sendActionbar(player, actionBarMsg);
             }
         }
     }

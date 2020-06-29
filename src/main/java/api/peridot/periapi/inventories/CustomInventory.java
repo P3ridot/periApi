@@ -24,16 +24,16 @@ public class CustomInventory implements InventoryHolder {
     private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
 
     private String title;
-    private InventoryType inventoryType;
-    private int rows;
+    private final InventoryType inventoryType;
+    private final int rows;
     private int columns;
-    private int size;
+    private final int size;
     private boolean closeable;
     private int updateDelay;
 
     private Consumer<InventoryCloseEvent> closeConsumer;
 
-    private InventoryProvider provider;
+    private final InventoryProvider provider;
     private InventoryContent content;
 
     private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryProvider provider, InventoryType inventoryType, int rows) {

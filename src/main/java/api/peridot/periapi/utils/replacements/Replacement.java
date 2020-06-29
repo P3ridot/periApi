@@ -2,8 +2,8 @@ package api.peridot.periapi.utils.replacements;
 
 public class Replacement {
 
-    private String from;
-    private String to;
+    private final String from;
+    private final String to;
 
     public Replacement(String from, Object to) {
         this.from = from;
