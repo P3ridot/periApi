@@ -40,6 +40,8 @@ public class ConfigurationFile extends ConfigurationProvider {
 
         yamlConfiguration = YamlConfiguration.loadConfiguration(file);
         setSection(yamlConfiguration.getConfigurationSection(sectionName));
+
+        reload();
     }
 
     public String getDirectory() {
