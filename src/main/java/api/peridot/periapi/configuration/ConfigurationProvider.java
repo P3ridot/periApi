@@ -29,11 +29,14 @@ public class ConfigurationProvider {
     public ConfigurationProvider(Plugin plugin, ConfigurationSection section) {
         this.logger = plugin.getLogger();
         this.section = section;
+        reload();
     }
 
+    @Deprecated
     public ConfigurationProvider(ConfigurationSection section) {
         this.logger = Bukkit.getLogger();
         this.section = section;
+        reload();
     }
 
     public ConfigurationProvider(Plugin plugin) {
