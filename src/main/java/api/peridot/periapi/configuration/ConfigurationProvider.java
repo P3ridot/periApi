@@ -46,8 +46,12 @@ public class ConfigurationProvider {
     }
 
     public Object getObject(String path) {
+        return getObject(path, false);
+    }
+
+    public Object getObject(String path, boolean force) {
         Object value = valuesMap.get(path);
-        if (value == null) {
+        if (value == null || force) {
             value = section.get(path);
             if (value != null) {
                 valuesMap.put(path, value);
@@ -192,8 +196,7 @@ public class ConfigurationProvider {
         if (!valuesMap.isEmpty()) {
             valuesMap.keySet().forEach(path -> {
                 try {
-                    System.out.println(path + " - " + getObject(path));
-                    valuesMap.put(path, getObject(path));
+                    valuesMap.put(path, getObject(path, true));
                 } catch (Exception ignored) {
                 }
             });
