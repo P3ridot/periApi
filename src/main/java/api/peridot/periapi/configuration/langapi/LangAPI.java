@@ -25,9 +25,13 @@ public class LangAPI {
     /* Getting or Creating messages */
 
     public LangMessage getMessage(String id) {
+        return getMessage(id, false);
+    }
+
+    public LangMessage getMessage(String id, boolean force) {
         LangMessage message = messages.get(id);
 
-        if (message == null) {
+        if (message == null || force) {
             message = new LangMessage(section.getConfigurationSection(id));
             messages.put(id, message);
         }
@@ -36,9 +40,13 @@ public class LangAPI {
     }
 
     public SimpleLangMessage getSimpleMessage(String id) {
+        return getSimpleMessage(id, false);
+    }
+
+    public SimpleLangMessage getSimpleMessage(String id, boolean force) {
         SimpleLangMessage message = simpleMessages.get(id);
 
-        if (message == null) {
+        if (message == null || force) {
             message = new SimpleLangMessage(section.getConfigurationSection(id));
             simpleMessages.put(id, message);
         }
@@ -78,13 +86,13 @@ public class LangAPI {
 
         if (!messages.isEmpty()) {
             messages.keySet().forEach(id -> {
-                messages.put(id, getMessage(id));
+                messages.put(id, getMessage(id, true));
             });
         }
 
         if (!simpleMessages.isEmpty()) {
             simpleMessages.keySet().forEach(id -> {
-                simpleMessages.put(id, getSimpleMessage(id));
+                simpleMessages.put(id, getSimpleMessage(id, true));
             });
         }
     }
