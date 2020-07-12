@@ -20,26 +20,30 @@ import java.util.logging.Logger;
 
 public class ConfigurationProvider {
 
-    private final Logger logger;
+    private final Map<String, Object> valuesMap;
 
-    private final Map<String, Object> valuesMap = new ConcurrentHashMap<>();
+    private final Logger logger;
 
     private ConfigurationSection section;
 
     public ConfigurationProvider(Plugin plugin, ConfigurationSection section) {
+        valuesMap = new ConcurrentHashMap<>();
+
         this.logger = plugin.getLogger();
         this.section = section;
-        reload();
     }
 
     @Deprecated
     public ConfigurationProvider(ConfigurationSection section) {
+        valuesMap = new ConcurrentHashMap<>();
+
         this.logger = Bukkit.getLogger();
         this.section = section;
-        reload();
     }
 
     public ConfigurationProvider(Plugin plugin) {
+        valuesMap = new ConcurrentHashMap<>();
+
         this.logger = plugin.getLogger();
     }
 
