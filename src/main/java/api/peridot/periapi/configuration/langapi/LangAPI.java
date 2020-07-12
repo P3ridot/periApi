@@ -11,7 +11,8 @@ import java.util.logging.Logger;
 
 public class LangAPI {
 
-    private final ConfigurationSection section;
+    private ConfigurationSection section;
+
     private final Logger logger;
 
     private final Map<String, LangMessage> messages = new ConcurrentHashMap<>();
@@ -20,6 +21,10 @@ public class LangAPI {
     public LangAPI(ConfigurationSection section) {
         this.section = section;
         this.logger = Bukkit.getLogger();
+    }
+
+    public void setSection(ConfigurationSection section) {
+        this.section = section;
     }
 
     /* Getting or Creating messages */
