@@ -20,30 +20,24 @@ import java.util.logging.Logger;
 
 public class ConfigurationProvider {
 
-    private final Map<String, Object> valuesMap;
+    private final Map<String, Object> valuesMap = new ConcurrentHashMap<>();
 
     private final Logger logger;
 
     private ConfigurationSection section;
 
     public ConfigurationProvider(Plugin plugin, ConfigurationSection section) {
-        valuesMap = new ConcurrentHashMap<>();
-
         this.logger = plugin.getLogger();
         this.section = section;
     }
 
     @Deprecated
     public ConfigurationProvider(ConfigurationSection section) {
-        valuesMap = new ConcurrentHashMap<>();
-
         this.logger = Bukkit.getLogger();
         this.section = section;
     }
 
     public ConfigurationProvider(Plugin plugin) {
-        valuesMap = new ConcurrentHashMap<>();
-
         this.logger = plugin.getLogger();
     }
 
@@ -198,6 +192,7 @@ public class ConfigurationProvider {
         if (!valuesMap.isEmpty()) {
             valuesMap.keySet().forEach(path -> {
                 try {
+                    System.out.println(path + " - " + getObject(path));
                     valuesMap.put(path, getObject(path));
                 } catch (Exception ignored) {
                 }

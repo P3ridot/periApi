@@ -20,7 +20,6 @@ public class LangAPI {
     public LangAPI(ConfigurationSection section) {
         this.section = section;
         this.logger = Bukkit.getLogger();
-        reload();
     }
 
     /* Getting or Creating messages */
