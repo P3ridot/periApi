@@ -60,13 +60,24 @@ public class PacketSender {
         }
     }
 
+    public static Object getHandle(Player player) {
+        Object handle = null;
+        try {
+            Reflection.MethodInvoker getHandle = Reflection.getMethod(player.getClass(), "getHandle");
+            handle = getHandle.invoke(player);
+        } catch (Exception ex) {
+            Bukkit.getLogger().severe("Could not get player handle");
+            ex.printStackTrace();
+        }
+        return handle;
+    }
+
     public static Object getConnection(Player player) {
         Object connection = null;
         try {
-            Reflection.MethodInvoker getHandle = Reflection.getMethod(player.getClass(), "getHandle");
-            Object nmsPlayer = getHandle.invoke(player);
-            Reflection.FieldAccessor<?> connectionField = Reflection.getField(nmsPlayer.getClass(), "playerConnection", PLAYER_CONNECTION_CLASS);
-            connection = connectionField.get(nmsPlayer);
+            Object handle = getHandle(player);
+            Reflection.FieldAccessor<?> connectionField = Reflection.getField(handle.getClass(), "playerConnection", PLAYER_CONNECTION_CLASS);
+            connection = connectionField.get(handle);
         } catch (Exception ex) {
             Bukkit.getLogger().severe("Could not get player connection");
             ex.printStackTrace();
