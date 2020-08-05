@@ -60,7 +60,7 @@ public class PacketSender {
         }
     }
 
-    private static Object getConnection(Player player) {
+    public static Object getConnection(Player player) {
         Object connection = null;
         try {
             Reflection.MethodInvoker getHandle = Reflection.getMethod(player.getClass(), "getHandle");
