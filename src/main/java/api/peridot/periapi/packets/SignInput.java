@@ -119,11 +119,22 @@ public class SignInput {
         }
 
         public Builder text(List<String> text) {
+            String text1 = "";
+            String text2 = "";
+            String text3 = "";
+            String text4 = "";
+            try {
+                text1 = text.get(0);
+                text2 = text.get(1);
+                text3 = text.get(2);
+                text4 = text.get(3);
+            } catch (Exception ignored) {
+            }
             this.text = new String[]{
-                    text.get(0),
-                    text.get(1),
-                    text.get(2),
-                    text.get(3)
+                    text1,
+                    text2,
+                    text3,
+                    text4
             };
             return this;
         }
