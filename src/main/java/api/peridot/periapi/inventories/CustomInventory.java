@@ -22,18 +22,15 @@ public class CustomInventory implements InventoryHolder {
     private final Plugin plugin;
     private final PeriInventoryManager manager;
     private final Map<UUID, PersonalInventoryData> personalInventoriesDataMap = new ConcurrentHashMap<>();
-
-    private String title;
     private final InventoryType inventoryType;
     private final int rows;
-    private int columns;
     private final int size;
+    private final InventoryProvider provider;
+    private final int columns;
+    private String title;
     private boolean closeable;
     private int updateDelay;
-
     private Consumer<InventoryCloseEvent> closeConsumer;
-
-    private final InventoryProvider provider;
     private InventoryContent content;
 
     private CustomInventory(Plugin plugin, PeriInventoryManager manager, InventoryProvider provider, InventoryType inventoryType, int rows) {
@@ -41,42 +38,52 @@ public class CustomInventory implements InventoryHolder {
         this.manager = manager;
         this.provider = provider;
         this.inventoryType = inventoryType;
-        this.rows = rows;
-        this.columns = 9;
-        if (inventoryType != null) {
-            if (inventoryType == InventoryType.ANVIL) {
+        switch (inventoryType) {
+            case ANVIL:
                 rows = 1;
-                columns = 3;
-            } else if (inventoryType == InventoryType.BEACON) {
+                this.columns = 3;
+                break;
+            case BEACON:
                 rows = 1;
-                columns = 1;
-            } else if (inventoryType == InventoryType.BREWING) {
+                this.columns = 1;
+                break;
+            case BREWING:
                 rows = 1;
                 if (Reflection.serverVersionNumber < 9) {
-                    columns = 3;
+                    this.columns = 3;
                 } else {
-                    columns = 4;
+                    this.columns = 4;
                 }
-            } else if (inventoryType == InventoryType.DISPENSER) {
+                break;
+            case DISPENSER:
                 rows = 3;
-                columns = 3;
-            } else if (inventoryType == InventoryType.DROPPER) {
+                this.columns = 3;
+                break;
+            case DROPPER:
                 rows = 3;
-                columns = 3;
-            } else if (inventoryType == InventoryType.ENCHANTING) {
+                this.columns = 3;
+                break;
+            case ENCHANTING:
                 rows = 1;
-                columns = 2;
-            } else if (inventoryType == InventoryType.FURNACE) {
+                this.columns = 2;
+                break;
+            case FURNACE:
                 rows = 1;
-                columns = 3;
-            } else if (inventoryType == InventoryType.HOPPER) {
+                this.columns = 3;
+                break;
+            case HOPPER:
                 rows = 1;
-                columns = 5;
-            } else if (inventoryType == InventoryType.WORKBENCH) {
+                this.columns = 5;
+                break;
+            case WORKBENCH:
                 rows = 2;
-                columns = 5;
-            }
+                this.columns = 5;
+                break;
+            default:
+                this.columns = 9;
+                break;
         }
+        this.rows = rows;
         this.content = new InventoryContent(rows, columns);
         this.size = rows * columns;
         manager.addInventory(this);

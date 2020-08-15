@@ -21,6 +21,10 @@ public class InventoryItem {
         this.update = update;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public ItemStack getItem() {
         if (item == null) return new ItemStack(Material.AIR);
         return item;
@@ -48,10 +52,6 @@ public class InventoryItem {
 
     public void setUpdate(boolean update) {
         this.update = update;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static final class Builder {

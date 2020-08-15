@@ -49,25 +49,20 @@ public abstract class TinyProtocol {
 
     // Speedup channel lookup
     private final Map<String, Channel> channelLookup = new MapMaker().weakValues().makeMap();
-    private Listener listener;
-
     // Channels that have already been removed
     private final Set<Channel> uninjectedChannels = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
-
-    // List of network markers
-    private List<Object> networkManagers;
-
     // Injected channel handlers
     private final List<Channel> serverChannels = Lists.newArrayList();
+    // Current handler name
+    private final String handlerName;
+    protected volatile boolean closed;
+    protected Plugin plugin;
+    private Listener listener;
+    // List of network markers
+    private List<Object> networkManagers;
     private ChannelInboundHandlerAdapter serverChannelHandler;
     private ChannelInitializer<Channel> beginInitProtocol;
     private ChannelInitializer<Channel> endInitProtocol;
-
-    // Current handler name
-    private final String handlerName;
-
-    protected volatile boolean closed;
-    protected Plugin plugin;
 
     /**
      * Construct a new instance of TinyProtocol, and start intercepting packets for all connected clients and future clients.

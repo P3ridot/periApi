@@ -75,6 +75,14 @@ public class SignInput {
         };
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static Response response() {
+        return new Response();
+    }
+
     public void open(Player player) {
         open(player, text);
     }
@@ -97,10 +105,6 @@ public class SignInput {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static final class Builder {
@@ -162,10 +166,6 @@ public class SignInput {
             return signInput;
         }
 
-    }
-
-    public static Response response() {
-        return new Response();
     }
 
     public static final class Response {

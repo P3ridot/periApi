@@ -11,12 +11,10 @@ import java.util.logging.Logger;
 
 public class LangAPI {
 
-    private ConfigurationSection section;
-
     private final Logger logger;
-
     private final Map<String, LangMessage> messages = new ConcurrentHashMap<>();
     private final Map<String, SimpleLangMessage> simpleMessages = new ConcurrentHashMap<>();
+    private ConfigurationSection section;
 
     public LangAPI(ConfigurationSection section) {
         this.section = section;
